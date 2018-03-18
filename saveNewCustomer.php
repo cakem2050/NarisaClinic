@@ -91,32 +91,32 @@
                             <strong>คนไข้ใหม่</strong>
                         </div>
                         <div class="panel-body">
-                            <form class="validate" action="php/contact.php" method="post" enctype="multipart/form-data" data-success="Sent! Thank you!" data-toastr-position="top-right">
+                            <form class="" action="../narisaclinic/insertCustomer.php" method="post" data-success="บันทึกสำเร็จ" data-toastr-position="top-right">
                                 <fieldset>
                                     <div class="row">
-                                        <div class="col-md-3 col-sm-3">
-                                            <input type="text" placeholder="เลข OPD" name="contact[opd]" value="" class="form-control required">
+                                        <div class="col-md-3 col-sm-3" id="opdc">
+                                            <input type="text" placeholder="เลข OPD" name="opd" id="opd" value="" class="form-control">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3 col-sm-3">
-                                            <input type="text" placeholder="ชื่อคนไข้" name="contact[first_name]" value="" class="form-control required">
+                                            <input type="text" placeholder="ชื่อคนไข้" name="name" value="" class="form-control required">
                                         </div>
                                         <div class="col-md-3 col-sm-3">
-                                            <input type="text" placeholder="นามสกุล" name="contact[last_name]" value="" class="form-control required">
+                                            <input type="text" placeholder="นามสกุล" name="sname" value="" class="form-control required">
                                         </div>
                                         <div class="col-md-3 col-sm-3">
-                                            <input type="text" placeholder="เบอร์โทร" name="contact[phone]" value="" class="form-control required">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12 col-sm-12">
-                                            <input type="text" placeholder="ที่อยู่" name="contact[address]" value="" class="form-control required">
+                                            <input type="text" placeholder="เบอร์โทร" name="tel" value="" class="form-control required">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12 col-sm-12">
-                                            <input type="text" placeholder="รายละเอียดอื่นๆ" name="contact[detail]" value="" class="form-control required">
+                                            <textarea name="add" placeholder="ที่อยู่" rows="4" class="form-control required"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12">
+                                            <textarea name="detail" placeholder="รายละเอียดอื่นๆ" rows="4" class="form-control required"></textarea>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -125,7 +125,7 @@
                                     <div class="col-md-5 col-sm-5">
                                     </div>
                                     <div class="col-md-2 col-sm-2">
-                                        <button type="submit" class="btn btn-3d btn-teal btn-ms btn-block margin-top-30">
+                                        <button type="submit" id="saveCustomer" class="btn btn-3d btn-teal btn-ms btn-block margin-top-30" >
                                             บันทึก
                                         </button>
                                     </div>
@@ -144,5 +144,6 @@
 
 </div>
 <?php include "components/template_js.php"; ?>
+<script type="text/javascript" src="//<?= $_SERVER['SERVER_NAME']?>/narisaclinic/assets/jquery/narisa-01.js"></script>
 </body>
 </html>
