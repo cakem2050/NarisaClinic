@@ -27,7 +27,7 @@
 
         <div class="row margin-top-20">
             <div class="col-md-3 col-md-offset-3">
-                <a href="#" class="btn btn-info btn-lg na-btn-edit">คนไข้เก่า</a>
+                <a href="oldList.php" class="btn btn-info btn-lg na-btn-edit">คนไข้เก่า</a>
             </div>
             <div class="col-md-3">
                 <a href="#"  class="btn btn-default btn-lg na-btn-edit">คนไข้ใหม่</a>

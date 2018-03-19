@@ -29,18 +29,18 @@
             <div id="panel-1" class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row padding-10">
-                        <form style="width: 100%">
+                        <form id="search_person" style="width: 100%">
                             <div class="form-group col-md-4">
                                 <label>ค้นหาชื่อ</label>
-                                <input type="text" class="form-control" placeholder="ชื่อ-นามสกุล">
+                                <input type="text" class="form-control" placeholder="ชื่อ-นามสกุล" name="name" required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label>ค้นหาเลข OPD</label>
-                                <input type="text" class="form-control" placeholder="รหัส OPD">
+                                <input type="text" class="form-control" placeholder="รหัส OPD" name="opd" required>
                             </div>
                             <div class="form-group col-md-4">
                                 <label>ค้นหาเบอร์โทร</label>
-                                <input type="text" class="form-control masked" data-format="9999999999" data-placeholder="X" placeholder="เบอร์โทรศัพท์">
+                                <input type="text" class="form-control masked" data-format="9999999999" data-placeholder="X" placeholder="เบอร์โทรศัพท์" name="phone" required>
                             </div>
                             <div class="col-md-2 col-md-offset-5">
                                 <button type="submit" class="btn btn-info na-btn-wbtn btn-lg">ค้นหา</button>
@@ -122,5 +122,6 @@
 
 </div>
 <?php include "components/template_js.php"; ?>
+<script src="assets/js/oldlist.js"></script>
 </body>
 </html>
