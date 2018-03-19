@@ -5,7 +5,7 @@
 
     <!-- Logo -->
     <span class="logo pull-left">
-					<img src="assets/images/logo_light.png" alt="admin panel" height="35" />
+					<img src="assets/images/logo_light.png" alt="admin panel" height="35" class="na-logo"/>
 				</span>
 
     <form method="get" action="page-search.html" class="search pull-left hidden-xs">

@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <title>Narisa Clinic</title>
     <?php include "components/template_css.php"; ?>
+    <link rel="stylesheet" href="assets/css/narisa-01.css">
 </head>
-<body>
+<body class="min">
 <!-- WRAPPER -->
 <div id="wrapper">
     <aside id="aside">
@@ -14,7 +15,7 @@
     <!-- HEADER -->
     <?php include "components/header.php"?>
     <!-- /HEADER -->
-    <section id="middle">
+    <section id="middle" style="margin-left: 0px;">
         <!-- page title -->
         <header id="page-header">
             <h1>Bootstrap Tables</h1>
