@@ -92,33 +92,33 @@
                             <strong>คนไข้ใหม่</strong>
                         </div>
                         <div class="panel-body">
-                            <form class="" action="../narisaclinic/php/insertCustomer.php" method="post" data-success="บันทึกสำเร็จ" data-toastr-position="top-right">
+                            <form class="" action="../narisaclinic/php/insertCustomer.php" method="post">
                                 <fieldset>
                                     <div class="row">
                                         <div class="col-md-3 col-sm-3" id="opdc">
-                                            <input type="text" placeholder="เลข OPD" name="opd" id="opd" value="" class="form-control">
-                                            <div id="opdc" class="hidden-input">รหัส opd นี้ถูกใช้งานแล้ว !</div>
+                                            <input type="text" placeholder="เลข OPD" name="opd" id="opd" value="" class="form-control required">
+                                            <div id="opdc" style="color: #bf6464;display: none;">รหัส opd นี้ถูกใช้งานแล้ว !</div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3 col-sm-3">
-                                            <input type="text" placeholder="ชื่อคนไข้" name="name" value="" class="form-control required">
+                                            <input type="text" placeholder="ชื่อคนไข้" id="name" name="name" value="" class="form-control required">
                                         </div>
                                         <div class="col-md-3 col-sm-3">
-                                            <input type="text" placeholder="นามสกุล" name="sname" value="" class="form-control required">
+                                            <input type="text" placeholder="นามสกุล" id="sname" name="sname" value="" class="form-control required">
                                         </div>
                                         <div class="col-md-3 col-sm-3">
-                                            <input type="text" placeholder="เบอร์โทร" name="tel" value="" class="form-control required">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12 col-sm-12">
-                                            <textarea name="add" placeholder="ที่อยู่" rows="4" class="form-control required"></textarea>
+                                            <input type="text" placeholder="เบอร์โทร" id="tel" name="tel" value="" class="form-control required">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12 col-sm-12">
-                                            <textarea name="detail" placeholder="รายละเอียดอื่นๆ" rows="4" class="form-control required"></textarea>
+                                            <textarea name="add" id="add" placeholder="ที่อยู่" rows="4" class="form-control required"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12">
+                                            <textarea name="detail" id="detail" placeholder="รายละเอียดอื่นๆ" rows="4" class="form-control required"></textarea>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -146,6 +146,6 @@
 
 </div>
 <?php include "components/template_js.php"; ?>
-<script type="text/javascript" src="assets/jquery/narisa-01.js"></script>
+<script type="text/javascript" src="assets/js/narisa-01.js"></script>
 </body>
 </html>

@@ -6,6 +6,11 @@
             </a>
         </li>
         <li>
+            <a href="../narisaclinic/saveNewCustomer.php">
+                <i class="main-icon fa fa-edit"></i> <span>บันทึกข้อมูลคนไข้</span>
+            </a>
+        </li>
+        <li>
             <a href="#">
                 <i class="main-icon fa fa-user"></i> <span>ประวัติคนไข้</span>
             </a>
@@ -15,6 +20,7 @@
                 <i class="main-icon fa fa-file"></i> <span>รายงาน</span>
             </a>
         </li>
+
     </ul>
 
     <!-- SECOND MAIN LIST -->
