@@ -1,10 +1,18 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: alexr
+ * Date: 19/3/2561
+ * Time: 17:32
+ */
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Narisa Clinic</title>
     <?php include "components/template_css.php"; ?>
-    <link href="//<?= $_SERVER['SERVER_NAME']?>/narisaclinic/assets/css/narisa-02.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <!-- WRAPPER -->
@@ -77,7 +85,7 @@
     <section id="middle">
         <!-- page title -->
         <header id="page-header">
-            <h1>CounterNarisa</h1>
+            <h1>Bootstrap Tables</h1>
             <ol class="breadcrumb">
                 <li><a href="#">Tables</a></li>
                 <li class="active">Bootstrap Tables</li>
@@ -89,36 +97,17 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-heading panel-heading-transparent">
-                            <strong>คนไข้ใหม่</strong>
+                            <strong>เข้าสู้ระบบ</strong>
                         </div>
                         <div class="panel-body">
-                            <form class="" action="../narisaclinic/php/insertCustomer.php" method="post" data-success="บันทึกสำเร็จ" data-toastr-position="top-right">
+                            <form class="" action="../narisaclinic/insertCustomer.php" method="post" data-success="บันทึกสำเร็จ" data-toastr-position="top-right">
                                 <fieldset>
                                     <div class="row">
-                                        <div class="col-md-3 col-sm-3" id="opdc">
-                                            <input type="text" placeholder="เลข OPD" name="opd" id="opd" value="" class="form-control">
-                                            <div id="opdc" class="hidden-input">รหัส opd นี้ถูกใช้งานแล้ว !</div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="col-md-3 col-sm-3">
-                                            <input type="text" placeholder="ชื่อคนไข้" name="name" value="" class="form-control required">
+                                            <input type="text" placeholder="username" name="username" value="" class="form-control required">
                                         </div>
                                         <div class="col-md-3 col-sm-3">
-                                            <input type="text" placeholder="นามสกุล" name="sname" value="" class="form-control required">
-                                        </div>
-                                        <div class="col-md-3 col-sm-3">
-                                            <input type="text" placeholder="เบอร์โทร" name="tel" value="" class="form-control required">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12 col-sm-12">
-                                            <textarea name="add" placeholder="ที่อยู่" rows="4" class="form-control required"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12 col-sm-12">
-                                            <textarea name="detail" placeholder="รายละเอียดอื่นๆ" rows="4" class="form-control required"></textarea>
+                                            <input type="text" placeholder="password" name="password" value="" class="form-control required">
                                         </div>
                                     </div>
                                 </fieldset>
@@ -128,7 +117,7 @@
                                     </div>
                                     <div class="col-md-2 col-sm-2">
                                         <button type="submit" id="saveCustomer" class="btn btn-3d btn-teal btn-ms btn-block margin-top-30" >
-                                            บันทึก
+                                            เข้าสู้ระบบ
                                         </button>
                                     </div>
                                     <div class="col-md-5 col-sm-5">
@@ -146,6 +135,5 @@
 
 </div>
 <?php include "components/template_js.php"; ?>
-<script type="text/javascript" src="assets/jquery/narisa-01.js"></script>
 </body>
 </html>
