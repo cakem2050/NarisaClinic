@@ -32,17 +32,18 @@
                         <form id="search_person" style="width: 100%">
                             <div class="form-group col-md-4">
                                 <label>ค้นหาชื่อ</label>
-                                <input type="text" class="form-control" placeholder="ชื่อ-นามสกุล" name="name" required>
+                                <input type="text" class="form-control" placeholder="ชื่อ-นามสกุล" name="name">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>ค้นหาเลข OPD</label>
-                                <input type="text" class="form-control" placeholder="รหัส OPD" name="opd" required>
+                                <input type="text" class="form-control" placeholder="รหัส OPD" name="opd">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>ค้นหาเบอร์โทร</label>
-                                <input type="text" class="form-control masked" data-format="9999999999" data-placeholder="X" placeholder="เบอร์โทรศัพท์" name="phone" required>
+                                <input type="text" class="form-control masked" data-format="9999999999" data-placeholder="X" placeholder="เบอร์โทรศัพท์" name="phone" >
                             </div>
                             <div class="col-md-2 col-md-offset-5">
+                                <div id="help-box" class="err-text hide">กรุณากรอกข้อมูลอย่างน้อย 1 ช่อง</div>
                                 <button type="submit" class="btn btn-info na-btn-wbtn btn-lg">ค้นหา</button>
                             </div>
                         </form>
@@ -83,7 +84,7 @@
 
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="customer">
                             <tr class="na-tr-select" onclick="window.location.href='index.php'">
                                 <td>1</td>
                                 <td>มานะ พบกิจ</td>
@@ -104,6 +105,7 @@
                             </tr>
                             </tbody>
                         </table>
+                        <div id="notFound"></div>
                     </div>
                 </div>
                 <!-- /panel content -->

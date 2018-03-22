@@ -18,7 +18,6 @@ $(document).ready(function () {
     // Smart Wizard
     $('#smartwizard').smartWizard({
         selected: 0,
-        theme: 'circles',
         transitionEffect: 'fade',
         showStepURLhash: false,
         toolbarSettings: {toolbarPosition: 'none'},

@@ -27,15 +27,29 @@
     background: #d8d8d8 !important;
 }
 /* Step wizard*/
-.circle-topic li{
-    margin: 0 !important;
+/*.edit-active{*/
+    /*padding-top: 20px;*/
+    /*height: 60px;*/
+/*}*/
+.sw-theme-arrows{
+    border: none !important;
 }
-.circle-topic li:first-of-type{
-    padding-right: 10%;
+.na-edit-nav{
+    height: 100px;
 }
-.circle-topic li:last-of-type{
-    padding-left: 10%;
+.na-edit-nav .edit-active{
+    padding-top: 20px !important;
+    height: 100px;
 }
+/*.circle-topic li{*/
+    /*margin: 0 !important;*/
+/*}*/
+/*.circle-topic li:first-of-type{*/
+    /*padding-right: 10%;*/
+/*}*/
+/*.circle-topic li:last-of-type{*/
+    /*padding-left: 10%;*/
+/*}*/
 .table td{
     vertical-align: middle !important;
 }
@@ -43,8 +57,45 @@ h3{
     margin-bottom: 10px;
 }
 .na-result div{
+    font-size: 32px;
     margin-bottom: 30px;
 }
+.na-result b {
+    font-size: 18px;
+ }
 .na-input-price{
     vertical-align: middle;
+}
+/* ====== oldlist =======    */
+.err-input{
+    border: dashed 2px red;
+}
+.err-text{
+    padding: 0px 0 20px 0;
+    color: red;
+    text-align: center;
+}
+.hide{
+    display: none;
+}
+.show{
+    display: block;
+}
+#notFound{
+    text-align: center;
+}
+/* ========= billist =========*/
+.bill-th{
+    background-color: rgba(0, 0, 0, 0.06) !important;
+}
+.select2-selection{
+    width: 100% !important;
+    padding: 5px 10px !important;
+    height: 40px !important;
+}
+.required-amount{
+    border: dashed 2px red !important;
+}
+.pass-amount{
+    border: solid 2px #098503 !important;
 }
