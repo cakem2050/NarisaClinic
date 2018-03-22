@@ -8,19 +8,18 @@
     include "../connect.php";
 ?>
 <?php
-    //$opd = $_POST["opd"];
-    $opd = "ertreter";
+    $opd = $_POST["opd"];
+    //$opd = "423423";
     $sql = "SELECT * FROM customer WHERE cus_opd = :cus_opd";
     $stmt = $conn->prepare($sql);
     $stmt->execute(array(':cus_opd'=>$opd));
 
+//    while($result = $stmt->fetch( PDO::FETCH_ASSOC )){
+//        echo $result['cus_name'];
+//    }
 
-while($result = $stmt->fetch( PDO::FETCH_ASSOC )){
-    echo $result['cus_opd'];
-}
-//while ($row = $result->fetch(PDO::FETCH_ASSOC))
-//{
-//    echo $row['cus_opd'];
-//}
+echo sizeof($stmt->fetchAll());
+
+
 ?>
 
