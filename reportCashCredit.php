@@ -5,75 +5,27 @@
     <title>Narisa Clinic</title>
     <?php include "components/template_css.php"; ?>
 </head>
-<body>
+<body class="min">
 <!-- WRAPPER -->
 <div id="wrapper">
     <aside id="aside">
-        <?php include "components/menu_admin.php"?>
+        <?php
+        session_start();
+        if(isset($_SESSION['usr_level'])){
+            if($_SESSION['usr_level'] == "M"){
+                include "components/menu_admin.php";
+            }else{
+                header("location: /narisaclinic/login.php");
+            }
+        }else{
+            header("location: /narisaclinic/login.php");
+        }
+        ?>
     </aside>
     <!-- HEADER -->
-    <header id="header">
-
-        <!-- Mobile Button -->
-        <button id="mobileMenuBtn"></button>
-
-        <!-- Logo -->
-        <span class="logo pull-left">
-					<img src="assets/images/logo_light.png" alt="admin panel" height="35" />
-				</span>
-
-        <form method="get" action="page-search.html" class="search pull-left hidden-xs">
-            <input type="text" class="form-control" name="k" placeholder="Search for something..." />
-        </form>
-
-        <nav>
-
-            <!-- OPTIONS LIST -->
-            <ul class="nav pull-right">
-
-                <!-- USER OPTIONS -->
-                <li class="dropdown pull-left">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                        <img class="user-avatar" alt="" src="assets/images/noavatar.jpg" height="34" />
-                        <span class="user-name">
-									<span class="hidden-xs">
-										John Doe <i class="fa fa-angle-down"></i>
-									</span>
-								</span>
-                    </a>
-                    <ul class="dropdown-menu hold-on-click">
-                        <li><!-- my calendar -->
-                            <a href="calendar.html"><i class="fa fa-calendar"></i> Calendar</a>
-                        </li>
-                        <li><!-- my inbox -->
-                            <a href="#"><i class="fa fa-envelope"></i> Inbox
-                                <span class="pull-right label label-default">0</span>
-                            </a>
-                        </li>
-                        <li><!-- settings -->
-                            <a href="page-user-profile.html"><i class="fa fa-cogs"></i> Settings</a>
-                        </li>
-
-                        <li class="divider"></li>
-
-                        <li><!-- lockscreen -->
-                            <a href="page-lock.html"><i class="fa fa-lock"></i> Lock Screen</a>
-                        </li>
-                        <li><!-- logout -->
-                            <a href="page-login.html"><i class="fa fa-power-off"></i> Log Out</a>
-                        </li>
-                    </ul>
-                </li>
-                <!-- /USER OPTIONS -->
-
-            </ul>
-            <!-- /OPTIONS LIST -->
-
-        </nav>
-
-    </header>
+    <?php include "components/header.php" ?>
     <!-- /HEADER -->
-    <section id="middle">
+    <section id="middle"  style="margin-left: 0px;">
         <!-- page title -->
         <header id="page-header">
             <h1>CounterNarisa</h1>
@@ -92,11 +44,11 @@
 
                         </div>
                         <div class="panel-body">
-                            <form class="validate" action="php/contact.php" method="post" enctype="multipart/form-data" data-success="Sent! Thank you!" data-toastr-position="top-right">
+                            <form class="" action="reportCashCredit.php" method="get" enctype="multipart/form-data" data-success="Sent! Thank you!" data-toastr-position="top-right">
                                 <fieldset>
                                     <div class="row">
                                         <div class="col-md-3 col-sm-3">
-                                            <input type="text" placeholder="วันที่ค้นหา" name="contact[opd]" value="" class="form-control required">
+                                            <input type="date" placeholder="วันที่ค้นหา" name="date" value="" class="form-control">
                                         </div>
                                         <div class="col-md-2 col-sm-2">
                                             <button type="submit" class="btn btn-3d btn-teal btn-ms btn-block">
@@ -119,70 +71,96 @@
                                         <th>ค้างชำระ</th>
                                     </tr>
                                     </thead>
+                                    <?php
+                                        if(isset($_GET['date']) && $_GET['date'] != ""){
+                                        include "php/connect.php";
+                                        $date = "".$_GET["date"]."%";
+                                        $sql = "SELECT * FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'CC'";
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute(array(':datecheck'=>$date));
+                                        $i = 1;
+                                        while($result = $stmt->fetch( PDO::FETCH_ASSOC )){
+                                    ?>
                                     <tbody>
                                     <tr>
-                                        <td>1</td>
+                                        <td><?=$i?></td>
                                         <td>
-                                            มาดี มาน่ะ
-                                            <p>เงินสด 200</p>
+                                            <?php
+
+                                            $sql_opd = "SELECT * FROM customer WHERE cus_opd = :opd";
+                                            $stmt_opd = $conn->prepare($sql_opd);
+                                            $stmt_opd->execute(array(':opd'=>$result['cus_opd']));
+                                            $usr_level ="F";
+                                            while($result_opd = $stmt_opd->fetch( PDO::FETCH_ASSOC )){
+                                                echo $result_opd['cus_name']." ".$result_opd['cus_sname'];
+                                            }
+                                            ?>
+                                            <p>เงินสด <?=$result['bills_cash']?></p>
                                         </td>
-                                        <td>25/03/2561 14:30
-                                            <p class="margin-bottom-0">credit</p>
-                                            <p class="nomargin">SCB 200</p>
-                                            <p class="nomargin">KBANK 300</p>
-                                            <p class="nomargin">KTC 400</p>
+                                        <td><?=$result['bills_datetime']?>
+                                            <?php
+
+                                            $sql_bk = "SELECT * FROM bank WHERE bak_status = :status ORDER BY bak_no ASC";
+                                            $stmt_bk = $conn->prepare($sql_bk);
+                                            $stmt_bk->execute(array(':status'=>"E"));
+                                            $usr_level ="F";
+                                            while($result_bk = $stmt_bk->fetch( PDO::FETCH_ASSOC )){
+                                                echo "<p class=\"nomargin\">".$result_bk['bak_id']." ";
+                                                $st = " bills_".strtolower($result_bk['bak_id']);
+                                                $sql_sbk = "SELECT SUM(".$st.") FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'CC' AND bills_no = :no";
+                                                $stmt_sbk = $conn->prepare($sql_sbk);
+                                                $stmt_sbk->execute(array(':datecheck'=>$date,':no'=>$result['bills_no']));
+                                                while($result_sbk = $stmt_sbk->fetch( PDO::FETCH_ASSOC )){
+                                                    echo $result_sbk['SUM('.$st.')']."</p>";
+                                                }
+                                            }
+                                            ?>
                                         </td>
-                                        <td>1200</td>
-                                        <td>200</td>
-                                        <td>1000</td>
-                                        <td>0</td>
+                                        <td><?=$result['bills_pay']?></td>
+                                        <td><?=$result['bills_discount']?></td>
+                                        <td><?=$result['bills_net']?></td>
+                                        <td><?=$result['bills_ost']?></td>
                                     </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>
-                                            มาดี มาน่ะ
-                                            <p>เงินสด 200</p>
-                                        </td>
-                                        <td>25/03/2561 14:30
-                                            <p class="margin-bottom-0">credit</p>
-                                            <p class="nomargin">SCB 200</p>
-                                            <p class="nomargin">KBANK 300</p>
-                                            <p class="nomargin">KTC 400</p>
-                                        </td>
-                                        <td>1200</td>
-                                        <td>200</td>
-                                        <td>1000</td>
-                                        <td>0</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>
-                                            มาดี มาน่ะ
-                                            <p>เงินสด 200</p>
-                                        </td>
-                                        <td>25/03/2561 14:30
-                                            <p class="margin-bottom-0">credit</p>
-                                            <p class="nomargin">SCB 200</p>
-                                            <p class="nomargin">KBANK 300</p>
-                                            <p class="nomargin">KTC 400</p>
-                                        </td>
-                                        <td>1200</td>
-                                        <td>200</td>
-                                        <td>1000</td>
-                                        <td>0</td>
-                                    </tr>
+                                    <?php
+                                    $i++;
+                                    }
+                                    ?>
                                     <tr>
                                         <td><b>รวม</b></td>
                                         <td colspan="6">
-                                            <p class="margin-top-0 margin-bottom-10">เงินสด 200</p>
+                                            <p class="margin-top-0 margin-bottom-10">เงินสด
+                                                <?php
+                                                    $sql_cash = "SELECT SUM(bills_cash) FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'CC'";
+                                                    $cash = $conn->prepare($sql_cash);
+                                                    $cash->execute(array(':datecheck'=>$date));
+                                                    while($result_cash = $cash->fetch( PDO::FETCH_ASSOC )){
+                                                        echo $result_cash['SUM(bills_cash)'];
+                                                    }
+                                                ?>
+                                            </p>
                                             <div class="margin-left-20">
-                                                <p class="nomargin">SCB 200</p>
-                                                <p class="nomargin">KBANK 300</p>
-                                                <p class="nomargin">KTC 400</p>
+                                                <?php
+
+                                                $sql_bk = "SELECT * FROM bank WHERE bak_status = :status ORDER BY bak_no ASC";
+                                                $stmt_bk = $conn->prepare($sql_bk);
+                                                $stmt_bk->execute(array(':status'=>"E"));
+                                                while($result_bk = $stmt_bk->fetch( PDO::FETCH_ASSOC )){
+                                                    echo "<p class=\"nomargin\">".$result_bk['bak_id']." ";
+                                                    $st = " bills_".strtolower($result_bk['bak_id']);
+                                                    $sql_sbk = "SELECT SUM(".$st.") FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'CC'";
+                                                    $stmt_sbk = $conn->prepare($sql_sbk);
+                                                    $stmt_sbk->execute(array(':datecheck'=>$date));
+                                                    while($result_sbk = $stmt_sbk->fetch( PDO::FETCH_ASSOC )){
+                                                        echo $result_sbk['SUM('.$st.')']."</p>";
+                                                    }
+                                                }
+                                                ?>
                                             </div>
                                         </td>
                                     </tr>
-
+                                    <?php
+                                    }
+                                    ?>
                                     </tbody>
                                 </table>
                             </div>

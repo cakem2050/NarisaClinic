@@ -5,75 +5,27 @@
     <title>Narisa Clinic</title>
     <?php include "components/template_css.php"; ?>
 </head>
-<body>
+<body class="min">
 <!-- WRAPPER -->
 <div id="wrapper">
     <aside id="aside">
-        <?php include "components/menu_admin.php"?>
+        <?php
+        session_start();
+        if(isset($_SESSION['usr_level'])){
+            if($_SESSION['usr_level'] == "M"){
+                include "components/menu_admin.php";
+            }else{
+                header("location: /narisaclinic/login.php");
+            }
+        }else{
+            header("location: /narisaclinic/login.php");
+        }
+        ?>
     </aside>
     <!-- HEADER -->
-    <header id="header">
-
-        <!-- Mobile Button -->
-        <button id="mobileMenuBtn"></button>
-
-        <!-- Logo -->
-        <span class="logo pull-left">
-					<img src="assets/images/logo_light.png" alt="admin panel" height="35" />
-				</span>
-
-        <form method="get" action="page-search.html" class="search pull-left hidden-xs">
-            <input type="text" class="form-control" name="k" placeholder="Search for something..." />
-        </form>
-
-        <nav>
-
-            <!-- OPTIONS LIST -->
-            <ul class="nav pull-right">
-
-                <!-- USER OPTIONS -->
-                <li class="dropdown pull-left">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                        <img class="user-avatar" alt="" src="assets/images/noavatar.jpg" height="34" />
-                        <span class="user-name">
-									<span class="hidden-xs">
-										John Doe <i class="fa fa-angle-down"></i>
-									</span>
-								</span>
-                    </a>
-                    <ul class="dropdown-menu hold-on-click">
-                        <li><!-- my calendar -->
-                            <a href="calendar.html"><i class="fa fa-calendar"></i> Calendar</a>
-                        </li>
-                        <li><!-- my inbox -->
-                            <a href="#"><i class="fa fa-envelope"></i> Inbox
-                                <span class="pull-right label label-default">0</span>
-                            </a>
-                        </li>
-                        <li><!-- settings -->
-                            <a href="page-user-profile.html"><i class="fa fa-cogs"></i> Settings</a>
-                        </li>
-
-                        <li class="divider"></li>
-
-                        <li><!-- lockscreen -->
-                            <a href="page-lock.html"><i class="fa fa-lock"></i> Lock Screen</a>
-                        </li>
-                        <li><!-- logout -->
-                            <a href="page-login.html"><i class="fa fa-power-off"></i> Log Out</a>
-                        </li>
-                    </ul>
-                </li>
-                <!-- /USER OPTIONS -->
-
-            </ul>
-            <!-- /OPTIONS LIST -->
-
-        </nav>
-
-    </header>
+    <?php include "components/header.php" ?>
     <!-- /HEADER -->
-    <section id="middle">
+    <section id="middle"  style="margin-left: 0px;">
         <!-- /page title -->
         <div id="content" class="padding-20">
             <div class="row">
@@ -84,7 +36,7 @@
 
                         </div>
                         <div class="panel-body">
-                            <form action="php/search_reportInClinic.php" method="post" enctype="multipart/form-data" data-success="Sent! Thank you!" data-toastr-position="top-right">
+                            <form action="reportInClinic.php" method="get" enctype="multipart/form-data" data-success="Sent! Thank you!" data-toastr-position="top-right">
                                 <fieldset>
                                     <div class="row">
                                         <div class="col-md-3 col-sm-3">
@@ -127,12 +79,21 @@
                                             <tbody>
                                                 <tr>
                                                     <td><?=$i?></td>
-                                                    <td><?=$result['cus_opd']?></td>
+                                                    <td><?php
+
+                                                        $sql_opd = "SELECT * FROM customer WHERE cus_opd = :opd";
+                                                        $stmt_opd = $conn->prepare($sql_opd);
+                                                        $stmt_opd->execute(array(':opd'=>$result['cus_opd']));
+                                                        while($result_opd = $stmt_opd->fetch( PDO::FETCH_ASSOC )){
+                                                            echo $result_opd['cus_name']." ".$result_opd['cus_sname'];
+                                                        }
+                                                        ?>
+                                                    </td>
                                                     <td><?=$result['bills_datetime']?></td>
                                                     <td><?=$result['bills_pay']?></td>
                                                     <td><?=$result['bills_discount']?></td>
-                                                    <td><?=$result['bills_ost']?></td>
                                                     <td><?=$result['bills_net']?></td>
+                                                    <td><?=$result['bills_ost']?></td>
                                                 </tr>
                                             <?php
                                                 $i++;
@@ -145,8 +106,7 @@
                                                         $pay = $conn->prepare($sql_pay);
                                                         $pay->execute(array(':datecheck'=>$date));
                                                         while($result = $pay->fetch( PDO::FETCH_ASSOC )){
-                                                            echo "<td>".$result['SUM(bills_pay)']."</td><td>".$result['SUM(bills_discount)']."</td><td>".$result['SUM(bills_ost)']."</td><td>".$result['SUM(bills_net)']."</td>";
-                                                        }
+                                                            echo "<td>".$result['SUM(bills_pay)']."</td><td>".$result['SUM(bills_discount)']."</td><td>".$result['SUM(bills_net)']."</td><td>".$result['SUM(bills_ost)']."</td>";                                                        }
                                                         ?>
                                                 </tr>
                                             </tbody>
