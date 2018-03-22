@@ -74,14 +74,6 @@
     </header>
     <!-- /HEADER -->
     <section id="middle">
-        <!-- page title -->
-        <header id="page-header">
-            <h1>CounterNarisa</h1>
-            <ol class="breadcrumb">
-                <li><a href="#">Tables</a></li>
-                <li class="active">Bootstrap Tables</li>
-            </ol>
-        </header>
         <!-- /page title -->
         <div id="content" class="padding-20">
             <div class="row">
@@ -92,11 +84,11 @@
 
                         </div>
                         <div class="panel-body">
-                            <form class="validate" action="php/contact.php" method="post" enctype="multipart/form-data" data-success="Sent! Thank you!" data-toastr-position="top-right">
+                            <form action="php/search_reportInClinic.php" method="post" enctype="multipart/form-data" data-success="Sent! Thank you!" data-toastr-position="top-right">
                                 <fieldset>
                                     <div class="row">
                                         <div class="col-md-3 col-sm-3">
-                                            <input type="text" placeholder="วันที่ค้นหา" name="contact[opd]" value="" class="form-control required">
+                                            <input type="date" placeholder="วันที่ค้นหา" name="date" value="" class="form-control">
                                         </div>
                                         <div class="col-md-2 col-sm-2">
                                             <button type="submit" class="btn btn-3d btn-teal btn-ms btn-block">
@@ -106,6 +98,9 @@
                                     </div>
                                 </fieldset>
                             </form>
+                            <?php
+
+                            ?>
                             <div class="table-responsive">
                                 <table class="table table-bordered nomargin">
                                     <thead>
@@ -119,43 +114,45 @@
                                             <th>ค้างชำระ</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>มาดี มาน่ะ</td>
-                                            <td>25/03/2561 14:30</td>
-                                            <td>1200</td>
-                                            <td>200</td>
-                                            <td>1000</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>มาดี มาน่ะ</td>
-                                            <td>25/03/2561 14:30</td>
-                                            <td>1200</td>
-                                            <td>200</td>
-                                            <td>1000</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>มาดี มาน่ะ</td>
-                                            <td>25/03/2561 14:30</td>
-                                            <td>1200</td>
-                                            <td>200</td>
-                                            <td>1000</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3"><b class="pull-right">รวม</b></td>
-                                            <td>1200</td>
-                                            <td>200</td>
-                                            <td>1000</td>
-                                            <td>0</td>
-                                        </tr>
-
-                                    </tbody>
+                                    <?php
+                                        if(isset($_GET['date']) && $_GET['date'] != ""){
+                                            include "php/connect.php";
+                                            $date = "".$_GET["date"]."%";
+                                            $sql = "SELECT * FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'TC'";
+                                            $stmt = $conn->prepare($sql);
+                                            $stmt->execute(array(':datecheck'=>$date));
+                                            $i = 1;
+                                            while($result = $stmt->fetch( PDO::FETCH_ASSOC )){
+                                        ?>
+                                            <tbody>
+                                                <tr>
+                                                    <td><?=$i?></td>
+                                                    <td><?=$result['cus_opd']?></td>
+                                                    <td><?=$result['bills_datetime']?></td>
+                                                    <td><?=$result['bills_pay']?></td>
+                                                    <td><?=$result['bills_discount']?></td>
+                                                    <td><?=$result['bills_ost']?></td>
+                                                    <td><?=$result['bills_net']?></td>
+                                                </tr>
+                                            <?php
+                                                $i++;
+                                            }
+                                            ?>
+                                                <tr>
+                                                    <td colspan="3"><b class="pull-right">รวม</b></td>
+                                                    <?php
+                                                        $sql_pay = "SELECT SUM(bills_pay),SUM(bills_discount),SUM(bills_ost),SUM(bills_net) FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'TC'";
+                                                        $pay = $conn->prepare($sql_pay);
+                                                        $pay->execute(array(':datecheck'=>$date));
+                                                        while($result = $pay->fetch( PDO::FETCH_ASSOC )){
+                                                            echo "<td>".$result['SUM(bills_pay)']."</td><td>".$result['SUM(bills_discount)']."</td><td>".$result['SUM(bills_ost)']."</td><td>".$result['SUM(bills_net)']."</td>";
+                                                        }
+                                                        ?>
+                                                </tr>
+                                            </tbody>
+                                    <?php
+                                        }
+                                    ?>
                                 </table>
                             </div>
                         </div>

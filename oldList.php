@@ -10,7 +10,18 @@
 <!-- WRAPPER -->
 <div id="wrapper">
     <aside id="aside">
-        <?php include "components/menu_admin.php" ?>
+        <?php
+        session_start();
+        if(isset($_SESSION['usr_level'])){
+            if($_SESSION['usr_level'] == "C"){
+                include "components/menu_staff.php";
+            }else{
+                header("location: /narisaclinic/login.php");
+            }
+        }else{
+            header("location: /narisaclinic/login.php");
+        }
+        ?>
     </aside>
     <!-- HEADER -->
     <?php include "components/header.php" ?>

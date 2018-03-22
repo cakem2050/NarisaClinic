@@ -27,7 +27,7 @@ if (!isset($_GET['opd'])) {
 <!-- WRAPPER -->
 <div id="wrapper">
     <aside id="aside">
-        <?php include "components/menu_admin.php" ?>
+        <?php include "components/menu_staff.php" ?>
     </aside>
     <!-- HEADER -->
     <?php include "components/header.php" ?>

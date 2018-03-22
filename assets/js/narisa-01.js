@@ -72,7 +72,7 @@ $(document).ready(function() {
                                     type: "post",
                                     success: function (data) {
                                         if (data) {
-                                            window.location.replace("../narisaclinic/home.php");
+                                            window.location.replace("../narisaclinic/billList.php?opd="+opd);
                                         }
                                     }
                                 });

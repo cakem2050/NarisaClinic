@@ -16,7 +16,7 @@
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="../narisaclinic/reportInClinic.php">
                 <i class="main-icon fa fa-file"></i> <span>รายงาน</span>
             </a>
         </li>
