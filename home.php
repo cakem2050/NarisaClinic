@@ -10,21 +10,12 @@
 <!-- WRAPPER -->
 <div id="wrapper">
     <aside id="aside">
-        <?php include "components/menu_admin.php" ?>
+        <?php include "components/menu_staff.php" ?>
     </aside>
     <!-- HEADER -->
     <?php include "components/header.php" ?>
     <!-- /HEADER -->
     <section id="middle" style="margin-left: 0px;">
-        <!-- page title -->
-        <header id="page-header">
-            <h1>Counter Narisa</h1>
-            <ol class="breadcrumb">
-                <li><a href="#">หน้าแรก</a></li>
-                <li class="active">ทำรายการ</li>
-            </ol>
-        </header>
-
         <div class="row margin-top-20">
             <div class="col-md-3 col-md-offset-3">
                 <a href="oldList.php" class="btn btn-info btn-lg na-btn-edit">คนไข้เก่า</a>

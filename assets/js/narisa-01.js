@@ -72,7 +72,7 @@ $(document).ready(function() {
                                     type: "post",
                                     success: function (data) {
                                         if (data) {
-                                            window.location.replace("../narisaclinic/_blank.php");
+                                            window.location.replace("../narisaclinic/home.php");
                                         }
                                     }
                                 });

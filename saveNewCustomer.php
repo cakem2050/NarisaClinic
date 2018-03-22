@@ -6,11 +6,11 @@
     <?php include "components/template_css.php"; ?>
     <link href="//<?= $_SERVER['SERVER_NAME']?>/narisaclinic/assets/css/narisa-02.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
+<body class="min">
 <!-- WRAPPER -->
 <div id="wrapper">
     <aside id="aside">
-        <?php include "components/menu_admin.php"?>
+        <?php include "components/menu_staff.php"?>
     </aside>
     <!-- HEADER -->
     <header id="header">
@@ -74,15 +74,8 @@
 
     </header>
     <!-- /HEADER -->
-    <section id="middle">
-        <!-- page title -->
-        <header id="page-header">
-            <h1>CounterNarisa</h1>
-            <ol class="breadcrumb">
-                <li><a href="#">Tables</a></li>
-                <li class="active">Bootstrap Tables</li>
-            </ol>
-        </header>
+    <section id="middle" style="margin-left: 0px;">
+
         <!-- /page title -->
         <div id="content" class="padding-20">
             <div class="row">
@@ -95,7 +88,7 @@
                             <form class="" action="../narisaclinic/php/insertCustomer.php" method="post">
                                 <fieldset>
                                     <div class="row">
-                                        <div class="col-md-3 col-sm-3" id="opdc">
+                                        <div class="col-md-3 col-sm-3">
                                             <input type="text" placeholder="เลข OPD" name="opd" id="opd" value="" class="form-control required">
                                             <div id="opdc" style="color: #bf6464;display: none;">รหัส opd นี้ถูกใช้งานแล้ว !</div>
                                         </div>

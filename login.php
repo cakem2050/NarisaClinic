@@ -84,49 +84,47 @@
     <!-- /HEADER -->
     <section id="middle">
         <!-- page title -->
-        <header id="page-header">
-            <h1>Bootstrap Tables</h1>
-            <ol class="breadcrumb">
-                <li><a href="#">Tables</a></li>
-                <li class="active">Bootstrap Tables</li>
-            </ol>
-        </header>
+
         <!-- /page title -->
-        <div id="content" class="padding-20">
+        <div class="panel-body">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading panel-heading-transparent">
-                            <strong>เข้าสู้ระบบ</strong>
-                        </div>
-                        <div class="panel-body">
-                            <form class="" action="../narisaclinic/insertCustomer.php" method="post" data-success="บันทึกสำเร็จ" data-toastr-position="top-right">
-                                <fieldset>
-                                    <div class="row">
-                                        <div class="col-md-3 col-sm-3">
-                                            <input type="text" placeholder="username" name="username" value="" class="form-control required">
-                                        </div>
-                                        <div class="col-md-3 col-sm-3">
-                                            <input type="text" placeholder="password" name="password" value="" class="form-control required">
-                                        </div>
-                                    </div>
-                                </fieldset>
+                <div class="col-md-4 col-sm-4">
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <form action="php/validatePHP/login.php" method="post" class="sky-form boxed">
+                        <header><i class="fa fa-users"></i> เข้าสู้ระบบ</header>
+                        <fieldset>
 
-                                <div class="row">
-                                    <div class="col-md-5 col-sm-5">
-                                    </div>
-                                    <div class="col-md-2 col-sm-2">
-                                        <button type="submit" id="saveCustomer" class="btn btn-3d btn-teal btn-ms btn-block margin-top-30" >
-                                            เข้าสู้ระบบ
-                                        </button>
-                                    </div>
-                                    <div class="col-md-5 col-sm-5">
-                                    </div>
-                                </div>
+                            <section>
+                                <label class="label">ชื่อผู้ใช้งาน</label>
+                                <label class="input">
+                                    <i class="icon-append fa fa-user"></i>
+                                    <input type="text" name="username">
+                                    <span class="tooltip tooltip-top-right">Username</span>
+                                </label>
+                            </section>
 
-                            </form>
-                        </div>
-                    </div>
+                            <section>
+                                <label class="label">รหัสผ่าน</label>
+                                <label class="input">
+                                    <i class="icon-append fa fa-lock"></i>
+                                    <input type="password" name="password">
+                                    <b class="tooltip tooltip-top-right">Password</b>
+                                </label>
+                                <?php
+                                    if(isset($_GET["error"])){
+                                        echo "<span style='color:#bf6464'>".$_GET["error"]."</span>";
+                                    }
+                                ?>
+                            </section>
+
+                        </fieldset>
+                        <section>
+                            <button type="submit" class="btn btn-primary margin-top-0">เข้าสู้ระบบ</button>
+                        </section>
+                    </form>
+                </div>
+                <div class="col-md-4 col-sm-4">
                 </div>
             </div>
         </div>
