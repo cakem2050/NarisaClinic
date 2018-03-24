@@ -26,14 +26,6 @@
     <?php include "components/header.php" ?>
     <!-- /HEADER -->
     <section id="middle"  style="margin-left: 0px;">
-        <!-- page title -->
-        <header id="page-header">
-            <h1>CounterNarisa</h1>
-            <ol class="breadcrumb">
-                <li><a href="#">Tables</a></li>
-                <li class="active">Bootstrap Tables</li>
-            </ol>
-        </header>
         <!-- /page title -->
         <div id="content" class="padding-20">
             <div class="row">

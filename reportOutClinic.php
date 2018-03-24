@@ -32,7 +32,7 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-heading panel-heading-transparent">
-                            <strong>รายงานการโอนที่ นอก clinic</strong>
+                            <strong>รายงานการโอนที่นอก clinic</strong>
 
                         </div>
                         <div class="panel-body">
@@ -64,8 +64,11 @@
                                     </tr>
                                     </thead>
                                     <?php
+                                    $result_row = 1;
                                     if(isset($_GET['date']) && $_GET['date'] != ""){
                                     include "php/connect.php";
+                                    include "php/func.php";
+                                    $op = new func();
                                     $date = "".$_GET["date"]."%";
                                     $sql = "SELECT * FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'TO'";
                                     $stmt = $conn->prepare($sql);
@@ -86,18 +89,22 @@
                                             }
                                             ?>
                                         </td>
-                                        <td><?=$result['bills_datetime']?></td>
+                                        <td><?php
+                                            $data = $op->date($result['bills_datetime']);
+                                            echo $data;
+                                            ?></td>
                                         <td><?=$result['bills_pay']?></td>
                                         <td><?=$result['bills_discount']?></td>
                                         <td><?=$result['bills_net']?></td>
                                         <td><?=$result['bills_ost']?></td>
                                     </tr>
                                     <?php
+                                        $result_row++;
                                     $i++;
                                     }
                                     ?>
                                     <tr>
-                                        <td colspan="3"><b class="pull-right">รวม</b></td>
+                                        <td colspan="3" class="text-center"><b>รวม</b></td>
                                         <?php
                                         $sql_pay = "SELECT SUM(bills_pay),SUM(bills_discount),SUM(bills_ost),SUM(bills_net) FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'TO'";
                                         $pay = $conn->prepare($sql_pay);
@@ -112,6 +119,19 @@
                                     ?>
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 col-sm-2 pull-right margin-top-20">
+                                    <?php
+                                    if(isset($_GET['date']) && $_GET['date'] != "" && $result_row != 1) {
+                                        ?>
+                                        <a href="php/pdf/outClinic.php?date=<?=$_GET['date']?>" class="btn btn-3d btn-teal btn-ms btn-block" id="print">
+                                            <i class="fa fa-download"></i>ปริ้น
+                                        </a>
+                                        <?php
+                                    }
+                                    ?>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -26,14 +26,6 @@
     <?php include "components/header.php" ?>
     <!-- /HEADER -->
     <section id="middle"  style="margin-left: 0px;">
-        <!-- page title -->
-        <header id="page-header">
-            <h1>CounterNarisa</h1>
-            <ol class="breadcrumb">
-                <li><a href="#">Tables</a></li>
-                <li class="active">Bootstrap Tables</li>
-            </ol>
-        </header>
         <!-- /page title -->
         <div id="content" class="padding-20">
             <div class="row">
@@ -74,6 +66,8 @@
                                     <?php
                                         if(isset($_GET['date']) && $_GET['date'] != ""){
                                         include "php/connect.php";
+                                        include "php/func.php";
+                                        $op = new func();
                                         $date = "".$_GET["date"]."%";
                                         $sql = "SELECT * FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'CC'";
                                         $stmt = $conn->prepare($sql);
@@ -97,7 +91,10 @@
                                             ?>
                                             <p>เงินสด <?=$result['bills_cash']?></p>
                                         </td>
-                                        <td><?=$result['bills_datetime']?>
+                                        <td><?php
+                                            $data = $op->date($result['bills_datetime']);
+                                            echo $data;
+                                            ?>
                                             <?php
 
                                             $sql_bk = "SELECT * FROM bank WHERE bak_status = :status ORDER BY bak_no ASC";
@@ -126,7 +123,7 @@
                                     }
                                     ?>
                                     <tr>
-                                        <td><b>รวม</b></td>
+                                        <td class="text-center"><b>รวม</b></td>
                                         <td colspan="6">
                                             <p class="margin-top-0 margin-bottom-10">เงินสด
                                                 <?php

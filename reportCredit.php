@@ -26,14 +26,6 @@
     <?php include "components/header.php" ?>
     <!-- /HEADER -->
     <section id="middle"  style="margin-left: 0px;">
-        <!-- page title -->
-        <header id="page-header">
-            <h1>CounterNarisa</h1>
-            <ol class="breadcrumb">
-                <li><a href="#">Tables</a></li>
-                <li class="active">Bootstrap Tables</li>
-            </ol>
-        </header>
         <!-- /page title -->
         <div id="content" class="padding-20">
             <div class="row">
@@ -74,6 +66,8 @@
                                     <?php
                                         if(isset($_GET['date']) && $_GET['date'] != ""){
                                             include "php/connect.php";
+                                            include "php/func.php";
+                                            $op = new func();
                                             $date = "".$_GET["date"]."%";
                                             $sql = "SELECT * FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'CD'";
                                             $stmt = $conn->prepare($sql);
@@ -115,7 +109,10 @@
                                                     ?>
                                                 </div>
                                             </td>
-                                            <td><?=$result['bills_datetime']?></td>
+                                            <td><?php
+                                                $data = $op->date($result['bills_datetime']);
+                                                echo $data;
+                                                ?></td>
                                             <td><?=$result['bills_pay']?></td>
                                             <td><?=$result['bills_discount']?></td>
                                             <td><?=$result['bills_net']?></td>
@@ -126,7 +123,7 @@
                                         }
                                         ?>
                                         <tr>
-                                            <td><b>รวม</b></td>
+                                            <td class="text-center"><b>รวม</b></td>
                                             <td colspan="6">
                                                 <?php
 
