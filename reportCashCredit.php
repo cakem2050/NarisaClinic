@@ -64,6 +64,7 @@
                                     </tr>
                                     </thead>
                                     <?php
+                                    $result_row = 1;
                                         if(isset($_GET['date']) && $_GET['date'] != ""){
                                         include "php/connect.php";
                                         include "php/func.php";
@@ -119,6 +120,7 @@
                                         <td><?=$result['bills_ost']?></td>
                                     </tr>
                                     <?php
+                                    $result_row++;
                                     $i++;
                                     }
                                     ?>
@@ -160,6 +162,19 @@
                                     ?>
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 col-sm-2 pull-right margin-top-20">
+                                    <?php
+                                    if(isset($_GET['date']) && $_GET['date'] != "" && $result_row != 1) {
+                                        ?>
+                                        <a href="php/pdf/cashCredit.php?date=<?=$_GET['date']?>" class="btn btn-3d btn-teal btn-ms btn-block" id="print">
+                                            <i class="fa fa-download"></i>ปริ้น
+                                        </a>
+                                        <?php
+                                    }
+                                    ?>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -64,6 +64,7 @@
                                     </tr>
                                     </thead>
                                     <?php
+                                    $result_row = 1;
                                         if(isset($_GET['date']) && $_GET['date'] != ""){
                                             include "php/connect.php";
                                             include "php/func.php";
@@ -83,7 +84,6 @@
                                                 $sql_opd = "SELECT * FROM customer WHERE cus_opd = :opd";
                                                 $stmt_opd = $conn->prepare($sql_opd);
                                                 $stmt_opd->execute(array(':opd'=>$result['cus_opd']));
-                                                $usr_level ="F";
                                                 while($result_opd = $stmt_opd->fetch( PDO::FETCH_ASSOC )){
                                                     echo $result_opd['cus_name']." ".$result_opd['cus_sname'];
                                                 }
@@ -95,7 +95,6 @@
                                                     $sql_bk = "SELECT * FROM bank WHERE bak_status = :status ORDER BY bak_no ASC";
                                                     $stmt_bk = $conn->prepare($sql_bk);
                                                     $stmt_bk->execute(array(':status'=>"E"));
-                                                    $usr_level ="F";
                                                     while($result_bk = $stmt_bk->fetch( PDO::FETCH_ASSOC )){
                                                         echo "<p class=\"nomargin\">".$result_bk['bak_id']." ";
                                                         $st = " bills_".strtolower($result_bk['bak_id']);
@@ -119,6 +118,7 @@
                                             <td><?=$result['bills_ost']?></td>
                                         </tr>
                                         <?php
+                                                $result_row++;
                                             $i++;
                                         }
                                         ?>
@@ -149,6 +149,19 @@
                                         }
                                     ?>
                                 </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 col-sm-2 pull-right margin-top-20">
+                                    <?php
+                                    if(isset($_GET['date']) && $_GET['date'] != "" && $result_row != 1) {
+                                        ?>
+                                        <a href="php/pdf/credit.php?date=<?=$_GET['date']?>" class="btn btn-3d btn-teal btn-ms btn-block" id="print">
+                                            <i class="fa fa-download"></i>ปริ้น
+                                        </a>
+                                        <?php
+                                    }
+                                    ?>
+                                </div>
                             </div>
                         </div>
                     </div>

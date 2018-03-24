@@ -74,11 +74,13 @@ while($result = $stmt->fetch( PDO::FETCH_ASSOC )){
             <td>".$result['bills_net']."</td>
             <td>".$result['bills_ost']."</td>
         </tr>
+        ";
+    $i++;
+}
+$content = $content."
         <tr>
             <td colspan='3' class='sum'>รวม</td>
-    ";
-}
-
+            ";
 $sql_pay = "SELECT SUM(bills_pay),SUM(bills_discount),SUM(bills_ost),SUM(bills_net) FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'TL'";
 $pay = $conn->prepare($sql_pay);
 $pay->execute(array(':datecheck'=>$date));
