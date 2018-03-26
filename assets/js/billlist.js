@@ -1,20 +1,66 @@
 $(document).ready(function () {
-    var barcode="";
-    $(document).keydown(function(e) {
-        var code = (e.keyCode ? e.keyCode : e.which);
-        if(code===13)// Enter key hit
-        {
-            alert(barcode);
+    $("#stale-money").change(function () {
+        var price_stale = $(this).val();
+        var sum = 0;
+        $('span[name="allprice"]').each(function () {
+            sum += +$(this).text() || 0;
+        });
+        var final_price = sum-price_stale;
+        $("#final_price").text(final_price);
+    });
+    $("#select1 input[type='number']").change(function () {
+       if($(this).val() > $(this).attr('max')){
+           $(this).val($(this).attr('max'));
+       }
+    });
+    $("#bank-money").change(function () {
+        if($("#bank-money").val()+$("#money").val() > $(this).attr('max')){
+            $("#select2 input[type='number']").val('');
         }
-        else if(code===9)// Tab key hit
-        {
-            alert("kwan");
+    });
+    $("#select3 input[type='number']").change(function () {
+        if($(this).val() > $(this).attr('max')){
+            $(this).val($(this).attr('max'));
         }
     });
 
-    $.fn.digits = function(){
-        return this.each(function(){
-            $(this).text( $(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") );
+    var barcode = "";
+    $(document).keydown(function (e) {
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if (code === 13) {
+            $.ajax({
+                url: "php/add_product_barcode.php",
+                type: "POST",
+                data: {
+                    barcode: barcode
+                },
+                cache: false,
+                success: function (data) {
+                    $("#tbody").append(data);
+                    var sum = 0;
+                    $('span[name="allprice"]').each(function () {
+                        sum += +$(this).text() || 0;
+                    });
+                    $("#result-allprice").text(sum);
+                    $("#content-pay #section1 input").val(sum);
+                    $("#content-pay #section3 input").val(sum);
+                    $("#result-allprice").digits();
+                    $("#final_price").text(sum);
+                    $("#final_price").digits();
+                }
+            });
+            barcode = "";
+        }
+        else if (code === 9) {
+            alert("kwan");
+        } else {
+            barcode = barcode + String.fromCharCode(code);
+        }
+    });
+
+    $.fn.digits = function () {
+        return this.each(function () {
+            $(this).text($(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
         })
     }
     $("#amount").change(function () {
@@ -22,45 +68,54 @@ $(document).ready(function () {
         $("#amount").addClass('pass-amount');
     });
     $("#submit").click(function () {
-        if($("#amount").val() > 0 && $("#discount-pre").val() <= 100) {
+        if ($("#amount").val() > 0 && $("#discount-pre").val() <= 100) {
             $.ajax({
-                url:"php/add_product.php",
-                type:"POST",
-                data:$("#bill-detail").serialize(),
+                url: "php/add_product.php",
+                type: "POST",
+                data: $("#bill-detail").serialize(),
                 cache: false,
-                success:function (data) {
+                success: function (data) {
                     $("#tbody").append(data);
                     var sum = 0;
-                    $('span[name="allprice"]').each(function() {
-                        sum += +$(this).text()||0;
+                    $('span[name="allprice"]').each(function () {
+                        sum += +$(this).text() || 0;
                     });
-                    $("#result-allprice").text(sum);
-                    $("#result-allprice").digits();
+                    var stale_money = $("#stale-money").val();
+                    $("#result-allprice").text(sum).digits();
+                    $("#amount").val('').attr('disabled',true).removeClass('pass-amount');
+                    $(".select2-selection__rendered").text('ค้นหาสินค้า');
+                    $("#discount-pre").val('').attr('disabled',true);
+                    $("#discount").val('').attr('disabled',true);
+                    $("#name").text('ชื่อรายการสินค้า');
+                    $("#price input").val('ราคา').attr('disabled',true);
+                    $("#price .input-group-addon").text('ชิ้น');
+                    $("#final_price").text(sum-stale_money);
+                    $("#final_price").digits();
                 }
             });
-        }else {
+        } else {
             $("#amount").addClass('required-amount');
         }
         $("#bill-detail").submit(false);
     });
-    
+
     $("#discount-pre").focus(function () {
-        $("#discount").attr('disabled',true);
+        $("#discount").attr('disabled', true);
     })
     $("#discount").focus(function () {
-        $("#discount-pre").attr('disabled',true);
+        $("#discount-pre").attr('disabled', true);
     });
     $("#discount-pre").focusout(function () {
-        if($("#discount-pre").val() === '' || $("#discount-pre").val() === '0'){
-            $("#discount").attr('disabled',false);
+        if ($("#discount-pre").val() === '' || $("#discount-pre").val() === '0') {
+            $("#discount").attr('disabled', false);
         }
     });
     $("#discount").focusout(function () {
-        if($("#discount").val() === '' || $("#discount").val() === '0'){
-            $("#discount-pre").attr('disabled',false);
+        if ($("#discount").val() === '' || $("#discount").val() === '0') {
+            $("#discount-pre").attr('disabled', false);
         }
     });
-    
+
     $("#search").change(function () {
         var id = $("#search").val();
         var action = "searchProduct";
@@ -69,20 +124,23 @@ $(document).ready(function () {
                 id: id,
                 action: action
             },
-            function(data){
+            function (data) {
                 $("#tempInput").children().remove();
                 $("#tempInput").prepend(data);
                 $("#name").text($("#pro_name-sub").val());
-                $("#price").text($("#pro_price-sub").val()+"/"+$("#pro_unit-sub").val());
-                $("#amount").attr('disabled',false);
-                $("#discount-pre").attr('disabled',false);
-                $("#discount").attr('disabled',false);
+                $("#price input").val($("#pro_price-sub").val()).attr('disabled',false);
+                $("#price .input-group-addon").text($("#pro_unit-sub").val());
+                $("#amount").attr('disabled', false);
+                $("#discount-pre").attr('disabled', false);
+                $("#discount").attr('disabled', false);
                 $("#pro-id").val($("#id-sub").val());
                 $("#pro-price").val($("#pro_price-sub").val());
             });
     });
     $("#search").select2({
-        id: function(bond){ return bond.id; },
+        id: function (bond) {
+            return bond.id;
+        },
         ajax: {
             method: "GET",
             url: "php/search_product.php",
@@ -95,41 +153,179 @@ $(document).ready(function () {
             },
             processResults: function (data, params) {
                 var array = data.resultajax; //depends on your JSON
-                return { results: array };
+                return {results: array};
             },
             cache: true
         },
         placeholder: 'Search for a repository',
-        escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+        escapeMarkup: function (markup) {
+            return markup;
+        }, // let our custom formatter work
         minimumInputLength: 1,
         templateResult: formatRepo,
         templateSelection: formatRepoSelection,
         language: {
             inputTooShort: tooShort,
-            errorLoading:fotmatError,
+            errorLoading: fotmatError,
         }
     });
+
     function tooShort() {
         var markup;
         markup = "<div>กรุณากรอกข้อมูล</div>";
         return markup;
     }
-    function fotmatError(){
+
+    function fotmatError() {
         var markup;
         markup = "<div><span class='select2-notfound pull-left'>ไม่พบสินค้าและบริการ</span></div>";
         return markup;
     }
-    function formatRepo (repo) {
+
+    function formatRepo(repo) {
         if (repo.loading) {
             return repo.text;
         }
         var markup;
-        markup = "<div class='select2-result-repository__title'>" + repo.id + "<span class=\"pull-right\">"+repo.pro_name+"</span></div>";
+        markup = "<div class='select2-result-repository__title'>" + repo.id + "<span class=\"pull-right\">" + repo.pro_name + "</span></div>";
 
         return markup;
     }
-    function formatRepoSelection (repo) {
+
+    function formatRepoSelection(repo) {
         return repo.id;
     }
 
+    $(".btn-group a").click(function () {
+       $(this).toggleClass('btn-default','btn-info');
+    });
+    $('input[type=radio]').change(function() {
+        var tabs= "#"+$(this).attr('class');
+        $(".tab-content div").removeClass('active');
+        $(tabs).addClass('active');
+    });
+
+
+});
+//change amount
+$(document).delegate("input[name='i-discount-pre']","focus",function () {
+    $(this).parent().parent().children("td[name='td-discount']").children("input[name='i-discount']").attr('disabled',true);
+});
+$(document).delegate("input[name='i-discount']","focus",function () {
+    $(this).parent().parent().children("td[name='td-discount-pre']").children("input[name='i-discount-pre']").attr('disabled',true);
+});
+$(document).delegate("input[name='i-discount-pre']","focusout",function () {
+    if ($(this).val() === '' || $(this).val() === '0') {
+        $(this).parent().parent().children("td[name='td-discount']").children("input[name='i-discount']").attr('disabled',false);
+    }
+});
+$(document).delegate("input[name='i-discount']","focusout",function () {
+    if ($(this).val() === '' || $(this).val() === '0') {
+        $(this).parent().parent().children("td[name='td-discount-pre']").children("input[name='i-discount-pre']").attr('disabled',false);
+    }
+});
+
+$(document).delegate("input[name='i-amount']", 'change', function () {
+    //Set discount
+    var discount_pre = $(this).parent().parent().children("td[name='td-discount-pre']").children("input[name='i-discount-pre']").val();
+    var discount = $(this).parent().parent().children("td[name='td-discount']").children("input[name='i-discount']").val();
+    var price = $(this).parent().parent().children("td[name='td-price']").children().children("input[name='price']").val();
+    var amount = $(this).val();
+    var final_discount = 0;
+    var allprice = 0;
+    if (discount_pre !== '' && discount_pre !== '0') {
+        allprice = (price * amount)-((price * amount)*(discount_pre/100));
+    } else if (discount !== '' && discount !== '0') {
+        allprice = (price * amount)-discount;
+    }else{
+        allprice = (price * amount);
+    }
+
+    $(this).parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(allprice);
+
+    var sum = 0;
+    $('span[name="allprice"]').each(function () {
+        sum += +$(this).text() || 0;
+    });
+    var stale_money = $("#stale-money").val();
+    $("#result-allprice").text(sum);
+    $("#result-allprice").digits();
+    $("#final_price").text(sum-stale_money);
+    $("#final_price").digits();
+});
+$(document).delegate("input[name='i-discount-pre']", "change", function () {
+    if ($(this).val() > 100) {
+        $(this).val(100);
+    }
+    if($(this).val() < 0){
+        $(this).val(0);
+    }
+    if (!$(this).val()) {
+        var discount = 0;
+    } else {
+        var discount = $(this).val();
+    }
+    var price = $(this).parent().parent().children("td[name='td-price']").children().children("input[name='price']").val();
+    var amount = $(this).parent().parent().children("td[name='td-amount']").children("input[name='i-amount']").val();
+    $(this).parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text((amount * price) - ((amount * price) * (discount / 100)));
+    var sum = 0;
+    $('span[name="allprice"]').each(function () {
+        sum += +$(this).text() || 0;
+    });
+    var stale_money = $("#stale-money").val();
+    $("#result-allprice").text(sum);
+    $("#result-allprice").digits();
+    $("#final_price").text(sum-stale_money);
+    $("#final_price").digits();
+});
+$(document).delegate("input[name='i-discount']", "change", function () {
+    var discount = 0;
+    if($(this).val() < 0){
+        $(this).val(0);
+    }
+    if (!$(this).val()) {
+        discount = 0;
+    } else {
+        discount = $(this).val();
+    }
+    var price = $(this).parent().parent().children("td[name='td-price']").children().children("input[name='price']").val();
+    var amount = $(this).parent().parent().children("td[name='td-amount']").children("input[name='i-amount']").val();
+    $(this).parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text((amount * price) - discount);
+    var sum = 0;
+    $('span[name="allprice"]').each(function () {
+        sum += +$(this).text() || 0;
+    });
+    var stale_money = $("#stale-money").val();
+    $("#result-allprice").text(sum);
+    $("#result-allprice").digits();
+    $("#final_price").text(sum-stale_money);
+    $("#final_price").digits();
+});
+$(document).delegate("input[name='price']","change",function () {
+    var discount_pre = $(this).parent().parent().parent().children("td[name='td-discount-pre']").children("input[name='i-discount-pre']").val();
+    var discount = $(this).parent().parent().parent().children("td[name='td-discount']").children("input[name='i-discount']").val();
+    var amount = $(this).parent().parent().parent().children("td[name='td-amount']").children("input[name='i-amount']").val();
+    var price = $(this).val();
+    var allprice = 0;
+    if (discount_pre !== '' && discount_pre !== '0') {
+        allprice = (price * amount)-((price * amount)*(discount_pre/100));
+    } else if (discount !== '' && discount !== '0') {
+        allprice = (price * amount)-discount;
+    }else{
+        allprice = (price * amount);
+    }
+    $(this).parent().parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(allprice);
+    var sum = 0;
+    $('span[name="allprice"]').each(function () {
+        sum += +$(this).text() || 0;
+    });
+    var stale_money = $("#stale-money").val();
+    $("#result-allprice").text(sum);
+    $("#result-allprice").digits();
+    $("#final_price").text(sum-stale_money);
+    $("#final_price").digits();
+});
+
+$(document).delegate("button[name='btn-delete']","click",function () {
+    $("#modelDelete").modal('show');
 });

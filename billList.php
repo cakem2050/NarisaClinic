@@ -9,6 +9,10 @@ if (!isset($_GET['opd'])) {
     $sql = "SELECT * FROM customer WHERE cus_opd LIKE LOWER ('" . $opd . "')";
     $result = $conn->query($sql);
     $row = $result->fetch();
+
+    $sql_bank = "SELECT * FROM bank WHERE bak_status = 'E' ORDER BY bak_no";
+    $result_bank = $conn->query($sql_bank);
+    $result_bank2 = $conn->query($sql_bank);
 }
 
 
@@ -22,6 +26,7 @@ if (!isset($_GET['opd'])) {
     <link rel="stylesheet" href="assets/css/narisa-01.css">
     <link rel="stylesheet" href="assets/template/plugins/smartwizard-master/css/smart_wizard_theme_arrows.css">
     <link href="assets/select2/css/select2.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="assets/jquery-ui/jquery-ui.css">
 </head>
 <body class="min">
 <!-- WRAPPER -->
@@ -33,28 +38,10 @@ if (!isset($_GET['opd'])) {
     <?php include "components/header.php" ?>
     <!-- /HEADER -->
     <section id="middle" style="margin-left: 0px;">
-        <div id="content" class="padding-20 na-pd-b-0">
-            <div id="panel-1" class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="row padding-10">
-                        <div class="col-md-4">
-                            <b>ชื่อ : </b><span><?= $row['cus_name'] ?> <?= $row['cus_sname'] ?></span>
-                        </div>
-                        <div class="col-md-4">
-                            <b>เลข OPD : </b><span><?= $row['cus_opd'] ?></span>
-                        </div>
-                        <div class="col-md-4">
-                            <b>เบอร์โทรศัพท์ : </b><span><?= $row['cus_tel'] ?></span>
-                        </div>
-                    </div>
-                </div>
 
-            </div>
-        </div>
         <!-- /page title -->
         <div id="content" class="padding-20">
             <div id="panel-1" class="panel panel-default">
-
                 <!-- panel content -->
                 <div class="panel-body">
                     <div class="row">
@@ -65,16 +52,30 @@ if (!isset($_GET['opd'])) {
                                     <li class="nav-item active"><a href="#step-1" class="edit-active">Step 1<br/>
                                             <small>ทำรายการซื้อสินค้า</small>
                                         </a></li>
-                                    <li class="nav-item"><a href="#step-2">Step 2<br/>
+                                    <li class="nav-item"><a href="#step-2" class="edit-active">Step 2<br/>
                                             <small>วิธีชำระเงิน</small>
                                         </a></li>
+                                    <li class="pull-right content-user">
+                                        <span class="content-user-main"><b>ชื่อ : </b><span><?= $row['cus_name'] ?> <?= $row['cus_sname'] ?></span></span><br>
+                                        <b>เลข OPD : </b><span><?= $row['cus_opd'] ?></span><br>
+                                        <b>เบอร์โทรศัพท์ : </b><span><?= $row['cus_tel'] ?></span><br>
+                                    </li>
                                 </ul>
                                 <div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h3>
+                                                <b>บันทึกรายการ</b>
+                                            </h3>
+                                        </div>
+                                        <div class="col-md-4 pull-right amount-result">
+                                            <span class="pull-right"><b>ยอดชำระ : </b><span
+                                                        class="pull-right margin-left-20"><span
+                                                            id="result-allprice">0</span> บาท</span></span>
+                                        </div>
+                                    </div>
                                     <!-- Page 1 -->
                                     <div id="step-1" class="" style="display: none">
-                                        <h3>
-                                            <b>บันทึกรายการ</b>
-                                        </h3>
                                         <div class="row">
                                             <div class="col-md-12"
                                                  style="overflow: scroll;overflow-y:auto;overflow-x:auto">
@@ -85,8 +86,8 @@ if (!isset($_GET['opd'])) {
                                                         <tr>
                                                             <th class="col-md-1">ลำดับ</th>
                                                             <th class="col-md-2">รหัสสินค้าและบริการ</th>
-                                                            <th class="col-md-3">ชื่อรายการสินค้า</th>
-                                                            <th class="col-md-1">ราคา/ชิ้น</th>
+                                                            <th class="col-md-2">ชื่อรายการสินค้า</th>
+                                                            <th class="col-md-2">ราคา/ชิ้น</th>
                                                             <th class="col-md-1">จำนวน</th>
                                                             <th class="col-md-1">ส่วนลด%</th>
                                                             <th class="col-md-1">ส่วนลด(บาท)</th>
@@ -104,7 +105,13 @@ if (!isset($_GET['opd'])) {
                                                                     <option value="ค้นหาสินค้า">ค้นหาสินค้า</option>
                                                                 </select></td>
                                                             <td id="name">ชื่อรายการสินค้า</td>
-                                                            <td id="price">ราคา/ชิ้น</td>
+                                                            <td id="price">
+                                                                <div class="input-group">
+                                                                    <input type="number" class="form-control"
+                                                                           placeholder="ราคา" disabled>
+                                                                    <div class="input-group-addon">/ชิ้น</div>
+                                                                </div>
+                                                            </td>
                                                             <td>
                                                                 <input type="number" id="amount" name="amount"
                                                                        class="form-control"
@@ -134,23 +141,140 @@ if (!isset($_GET['opd'])) {
                                                     </table>
                                                 </form>
                                             </div>
-                                            <div class="col-md-4 col-md-offset-8 na-result" style="padding: 20px">
-                                                <div>
-                                                    <b>ยอดชำระ : </b><span class="pull-right"><span id="result-allprice">0</span> บาท</span>
-                                                </div>
-                                                <div class="form-inline na-input-price">
-                                                    <b>ค้างชำระ : </b><span class="pull-right"><input type="number"
-                                                                                                      class="form-control"
-                                                                                                      placeholder="จำนวน"></span>
-                                                </div>
-                                                <div>
-                                                    <b>ราคาสุทธิ : </b><span class="pull-right">xx,xxx บาท</span>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                     <!-- Page 2 -->
                                     <div id="step-2" class="" style="display: none">
+                                        <div class="row">
+                                            <div class="btn-group" data-toggle="buttons">
+                                                <div class="col-md-4">
+                                                    <label class="btn btn-default">
+                                                        <input type="radio" name="option" class="select1"
+                                                               autocomplete="off" style="">โอนเงินใน Clinic
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="btn btn-default">
+                                                        <input type="radio" name="option" class="select1"
+                                                               autocomplete="off" style="">โอนเงินนอก Clinic
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="btn btn-default">
+                                                        <input type="radio" name="option" class="select1"
+                                                               autocomplete="off" style="">โอนเงิน Line @
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="btn btn-default">
+                                                        <input type="radio" name="option" class="select1"
+                                                               autocomplete="off" style="">เงินสด
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="btn btn-default">
+                                                        <input type="radio" name="option" class="select2"
+                                                               autocomplete="off" style="">เงินสด + Credit
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="btn btn-default">
+                                                        <input type="radio" name="option" class="select3"
+                                                               autocomplete="off" style="">Credit
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div id="content-pay" class="col-md-8">
+                                            <div class="tab-content">
+                                                <div role="tabpanel" class="tab-pane form-inline active" id="select1">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-inline">
+                                                                <div class="form-group">
+                                                                    <div class="input-group">
+                                                                        <div class="input-group-addon">จำนวนเงิน :</div>
+                                                                        <input type="number" class="form-control"
+                                                                               placeholder="จำนวนเงิน">
+                                                                        <div class="input-group-addon">บาท</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div role="tabpanel" class="tab-pane" id="select2">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-inline">
+                                                                <div class="form-group">
+                                                                    <div class="input-group">
+                                                                        <div class="input-group-addon">จำนวนเงินสด :
+                                                                        </div>
+                                                                        <input type="number" class="form-control"
+                                                                               placeholder="จำนวนเงิน" id="money">
+                                                                        <div class="input-group-addon">บาท</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-inline">
+                                                                <div class="form-group">
+                                                                    <?php
+                                                                    while ($bank = $result_bank->fetch()){
+                                                                    ?>
+                                                                    <div class="input-group">
+                                                                        <div class="input-group-addon">ธนาคาร : <?= $bank['bak_id'] ?> </div>
+                                                                        <input type="number" class="form-control"
+                                                                               placeholder="จำนวนเงิน" id="bank-money">
+                                                                        <div class="input-group-addon">บาท</div>
+                                                                    </div>
+                                                                        <?php
+                                                                    }
+                                                                    ?>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div role="tabpanel" class="tab-pane" id="select3">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-inline">
+                                                                <div class="form-group">
+                                                                    <?php
+                                                                    while ($bank = $result_bank2->fetch()){
+                                                                        ?>
+                                                                        <div class="input-group">
+                                                                            <div class="input-group-addon">ธนาคาร : <?= $bank['bak_id'] ?> </div>
+                                                                            <input type="number" class="form-control"
+                                                                                   placeholder="จำนวนเงิน" id="bank-money">
+                                                                            <div class="input-group-addon">บาท</div>
+                                                                        </div>
+                                                                        <?php
+                                                                    }
+                                                                    ?>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="summary" class="col-md-4 na-result">
+                                            <div class="form-inline na-input-price">
+                                                <b>ค้างชำระ : </b><span class="pull-right">
+                                                    <input type="number" id="stale-money" class="form-control"
+                                                           placeholder="จำนวน"></span>
+                                            </div>
+                                            <div>
+                                                <b>ราคาสุทธิ : </b><span class="pull-right"><span id="final_price">0</span> บาท</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -161,16 +285,36 @@ if (!isset($_GET['opd'])) {
                         <button class="btn btn-default btn-sm next-btn" id="next-btn" type="button">ถัดไป</button>
                         <button class="btn btn-info btn-sm" id="success-btn" type="button">ยืนยันรายการ</button>
                     </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="modelDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">กรุณาใส่ PassCode</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="text" name="passcode" class="form-control" >
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" >ยืนยันการลบ</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
     </section>
+    <!-- Modal -->
     <!-- /MIDDLE -->
 
 </div>
 <?php include "components/template_js.php"; ?>
 <script src="assets/template/plugins/smartwizard-master/js/jquery.smartWizard.js"></script>
+<script src="assets/jquery-ui/jquery-ui.js"></script>
 <script src="assets/js/config-stepwizard.js"></script>
 <script src="assets/select2/js/select2.min.js"></script>
 <script src="assets/js/billlist.js"></script>

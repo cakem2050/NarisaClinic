@@ -56,13 +56,15 @@ if (isset($_POST['action'])) {
                     <td>".$count."</td>
                     <td><input type=\"text\" class=\"form-control\" value='".$items['pro_id']."' disabled></td>
                     <td>".$items['pro_name']."</td>
-                    <td>".$items['bild_price']."/".$items['pro_unit']."</td>
-                    <td><input type=\"number\" class=\"form-control\" value='".$items['bild_value']."' disabled></td>
-                    <td><input type=\"number\" class=\"form-control\" value='".$discount_pre."' disabled></td>
-                    <td><input type=\"number\" class=\"form-control\" value='".$discount."' disabled></td>
-                    <td><span name='allprice'>".$items['total']."</span></td>
+                    <td name='td-price'><div class=\"input-group\">
+                    <input class='form-control price' type='number' name='price' value='" . $items['bild_value'] . "'>
+                    <div class=\"input-group-addon\">/" . $items['pro_unit'] . "</div></div></td>
+                    <td name='td-amount'><input type=\"number\" name='i-amount' class=\"form-control\" value='".$items['bild_value']."' ></td>
+                    <td name='td-discount-pre'><input type=\"number\" name='i-discount-pre' class=\"form-control\" value='".$discount_pre."' ></td>
+                    <td name='td-discount'><input type=\"number\" name='i-discount' class=\"form-control\" value='".$discount."' ></td>
+                    <td name='td-allprice'><span name='allprice'>".$items['total']."</span></td>
                     <td>
-                        <button class=\"btn btn-danger btn-sm\">
+                        <button type='button' class=\"btn btn-danger btn-sm\" name='btn-delete'>
                             <i class=\"glyphicon glyphicon-trash\"></i>ยกเลิกรายการ
                         </button>
                     </td>

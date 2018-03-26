@@ -38,8 +38,10 @@
     height: 100px;
 }
 .na-edit-nav .edit-active{
-    padding-top: 20px !important;
+    font-size: 20px;
+    padding-top: 25px !important;
     height: 100px;
+    width: 200px;
 }
 /*.circle-topic li{*/
     /*margin: 0 !important;*/
@@ -58,7 +60,6 @@ h3{
 }
 .na-result div{
     font-size: 32px;
-    margin-bottom: 30px;
 }
 .na-result b {
     font-size: 18px;
@@ -99,3 +100,69 @@ h3{
 .pass-amount{
     border: solid 2px #098503 !important;
 }
+.content-user{
+    padding: 20px;
+}
+.content-user-main{
+    font-size: 20px;
+}
+.step-content h3{
+    margin-top: 10px;
+}
+#result-allprice{
+    font-size: 40px !important;
+}
+.amount-result{
+    font-size: 20px;
+    color: #1ABC9C !important;
+}
+.amount-result b {
+    line-height: 3.45;
+}
+.na-checkbox{
+    height:100px;
+    width: 100px;
+}
+.btn-group{
+    width: 100%;
+}
+.btn-group .btn.active{
+    color: #fff;
+    background-color: #5bc0de;
+    border-color: #46b8da;
+}
+.btn-group .btn{
+    font-size: 30px !important;
+    height: 150px !important;
+    padding: 55px 10px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.btn span{
+    padding-right: 20px;
+}
+.btn input[type='radio']{
+    display: none;
+}
+#content-pay{
+    display: none;
+}
+.tab-content .form-group{
+    width: 100%;
+}
+.tab-content .input-group{
+    width: 100%;
+}
+.input-group-addon{
+    width: 150px !important;
+}
+.price{
+    width: 80px;
+}
+#price .input-group-addon{
+    width: 80px !important;
+}
+td[name='td-price'] .input-group-addon{
+    width: 80px !important;
+}
+
