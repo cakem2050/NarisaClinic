@@ -13,7 +13,7 @@ include "../func.php";
 $op = new func();
 $date = $_GET['date'];
 echo $date;
-
+$report_date = $op->date($date);
 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
 $content = "<style>
 .container,th,td,h1{
@@ -32,25 +32,29 @@ table {
 .sum{
     text-align: center;
 }
+.red{
+    color: #bf6464;
+}
 </style>
-<h1>รายงานการโอนที่ CLINIC</h1>
+<h1>รายงานการโอนที่ CLINIC ประจำวันที่ ".$report_date."</h1>
 <div class='container'>
     <table>
         <thead>
             <tr>
-                <th>ลำดับ</th>
-                <th width='28%'>ชื่อ นามสกุล</th>
-                <th width='20%'>วันที่/เวลา โอน</th>
+                <th width='5%'>ลำดับ</th>
+                <th width='15%'>ชื่อ นามสกุล</th>
+                <th width='13%'>วันที่/เวลา โอน</th>
                 <th width='12%'>ยอดชำระ</th>
                 <th width='10%'>ส่วนลด</th>
-                <th width='12%'>ราคาสุทธิ</th>
-                <th width='12%'>ค้างชำระ</th>
+                <th width='10%'>ราคาสุทธิ</th>
+                <th width='10%'>ค้างชำระ</th>
+                <th width='12%'></th>
             </tr>
         </thead>
         <tbody>
     ";
 $date = "".$_GET["date"]."%";
-$sql = "SELECT * FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'TC'";
+$sql = "SELECT * FROM bills WHERE bills_datetime LIKE :datecheck AND bills_ptype = 'TC'";
 $stmt = $conn->prepare($sql);
 $stmt->execute(array(':datecheck'=>$date));
 $i = 1;
@@ -72,8 +76,13 @@ while($result = $stmt->fetch( PDO::FETCH_ASSOC )){
             <td>".$result['bills_pay']."</td>
             <td>".$result['bills_discount']."</td>
             <td>".$result['bills_net']."</td>
-            <td>".$result['bills_ost']."</td>
-        </tr>
+            <td>".$result['bills_ost']."</td><td>
+    ";
+    if($result['bills_status'] == "D"){
+        $content = $content."<span class='red'>รายการที่ถูกยกเลิก</span>";
+    }
+    $content = $content."
+        </td></tr>
     ";
     $i++;
 }
@@ -85,7 +94,7 @@ $sql_pay = "SELECT SUM(bills_pay),SUM(bills_discount),SUM(bills_ost),SUM(bills_n
 $pay = $conn->prepare($sql_pay);
 $pay->execute(array(':datecheck'=>$date));
 while($result = $pay->fetch( PDO::FETCH_ASSOC )) {
-    $content = $content."<td>" . $result['SUM(bills_pay)'] . "</td><td>" . $result['SUM(bills_discount)'] . "</td><td>" . $result['SUM(bills_net)'] . "</td><td>" . $result['SUM(bills_ost)'] . "</td>";
+    $content = $content."<td>" . $result['SUM(bills_pay)'] . "</td><td>" . $result['SUM(bills_discount)'] . "</td><td>" . $result['SUM(bills_net)'] . "</td><td>" . $result['SUM(bills_ost)'] . "</td><td></td>";
 }
 
 $content = $content."

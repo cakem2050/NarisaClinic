@@ -53,6 +53,7 @@
                             <div class="table-responsive">
                                 <table class="table table-bordered nomargin">
                                     <?php
+
                                         if(isset($_GET['date']) && $_GET['date'] != ""){
                                             include "php/connect.php";
                                             $date = "".$_GET["date"]."%";
@@ -164,6 +165,13 @@
                                         }
                                         ?>
                                 </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 col-sm-2 pull-right margin-top-20">
+                                    <a href="php/pdf/cost.php?date=<?=$_GET['date']?>" class="btn btn-3d btn-teal btn-ms btn-block" id="print">
+                                        <i class="fa fa-download"></i>ปริ้น
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -61,6 +61,7 @@
                                         <th>ส่วนลด</th>
                                         <th>ราคาสุทธิ</th>
                                         <th>ค้างชำระ</th>
+                                        <th width="10%"></th>
                                     </tr>
                                     </thead>
                                     <?php
@@ -70,7 +71,7 @@
                                         include "php/func.php";
                                         $op = new func();
                                         $date = "".$_GET["date"]."%";
-                                        $sql = "SELECT * FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'TL'";
+                                        $sql = "SELECT * FROM bills WHERE bills_datetime LIKE :datecheck AND bills_ptype = 'TL'";
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute(array(':datecheck'=>$date));
                                         $i = 1;
@@ -97,6 +98,11 @@
                                                 <td><?=$result['bills_discount']?></td>
                                                 <td><?=$result['bills_net']?></td>
                                                 <td><?=$result['bills_ost']?></td>
+                                                <td><?php
+                                                    if($result['bills_status'] == "D"){
+                                                        echo "<span style='color: #bf6464;'>รายการที่ถูกยกเลิก</span>";
+                                                    }
+                                                    ?></td>
                                             </tr>
                                             <?php
                                             $result_row++;
@@ -110,7 +116,7 @@
                                             $pay = $conn->prepare($sql_pay);
                                             $pay->execute(array(':datecheck'=>$date));
                                             while($result = $pay->fetch( PDO::FETCH_ASSOC )){
-                                                echo "<td>".$result['SUM(bills_pay)']."</td><td>".$result['SUM(bills_discount)']."</td><td>".$result['SUM(bills_net)']."</td><td>".$result['SUM(bills_ost)']."</td>";                                            }
+                                                echo "<td>".$result['SUM(bills_pay)']."</td><td>".$result['SUM(bills_discount)']."</td><td>".$result['SUM(bills_net)']."</td><td>".$result['SUM(bills_ost)']."</td><td></td>";                                            }
                                             ?>
                                         </tr>
                                         </tbody>

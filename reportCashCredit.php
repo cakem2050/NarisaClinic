@@ -61,6 +61,7 @@
                                         <th>ส่วนลด</th>
                                         <th>ราคาสุทธิ</th>
                                         <th>ค้างชำระ</th>
+                                        <th width="12%"></th>
                                     </tr>
                                     </thead>
                                     <?php
@@ -70,7 +71,7 @@
                                         include "php/func.php";
                                         $op = new func();
                                         $date = "".$_GET["date"]."%";
-                                        $sql = "SELECT * FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'CC'";
+                                        $sql = "SELECT * FROM bills WHERE bills_datetime LIKE :datecheck AND bills_ptype = 'CC'";
                                         $stmt = $conn->prepare($sql);
                                         $stmt->execute(array(':datecheck'=>$date));
                                         $i = 1;
@@ -105,7 +106,7 @@
                                             while($result_bk = $stmt_bk->fetch( PDO::FETCH_ASSOC )){
                                                 echo "<p class=\"nomargin\">".$result_bk['bak_id']." ";
                                                 $st = " bills_".strtolower($result_bk['bak_id']);
-                                                $sql_sbk = "SELECT SUM(".$st.") FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'CC' AND bills_no = :no";
+                                                $sql_sbk = "SELECT SUM(".$st.") FROM bills WHERE bills_datetime LIKE :datecheck AND bills_ptype = 'CC' AND bills_no = :no";
                                                 $stmt_sbk = $conn->prepare($sql_sbk);
                                                 $stmt_sbk->execute(array(':datecheck'=>$date,':no'=>$result['bills_no']));
                                                 while($result_sbk = $stmt_sbk->fetch( PDO::FETCH_ASSOC )){
@@ -118,6 +119,11 @@
                                         <td><?=$result['bills_discount']?></td>
                                         <td><?=$result['bills_net']?></td>
                                         <td><?=$result['bills_ost']?></td>
+                                        <td><?php
+                                            if($result['bills_status'] == "D"){
+                                                echo "<span style='color: #bf6464;'>รายการที่ถูกยกเลิก</span>";
+                                            }
+                                            ?></td>
                                     </tr>
                                     <?php
                                     $result_row++;
@@ -126,7 +132,7 @@
                                     ?>
                                     <tr>
                                         <td class="text-center"><b>รวม</b></td>
-                                        <td colspan="6">
+                                        <td colspan="7">
                                             <p class="margin-top-0 margin-bottom-10">เงินสด
                                                 <?php
                                                     $sql_cash = "SELECT SUM(bills_cash) FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'CC'";
