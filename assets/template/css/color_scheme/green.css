@@ -31,11 +31,11 @@
 	#aside .logo,
 	body.min #asidesize,
 	#aside, #asidebg {
-		background-color: #5a6667;
+		background-color: #4b964b;
 	}
 	
 	body.min #aside ul.nav>li:hover:before {
-		border-right-color: #5a6667;
+		border-right-color: #762629;
 	}
 
 	.panel>.panel-heading strong {
@@ -65,6 +65,6 @@
 	
 	@media only screen and (min-width: 768px) {
 		body.min #aside ul.nav>li:hover>a span {
-			background-color: #5a6667;
+			background-color: #93262b;
 		}
 	}

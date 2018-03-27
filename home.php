@@ -1,6 +1,6 @@
 <?php
 include "php/connect.php";
-$sql = "SELECT * FROM bills ORDER BY bills_datetime LIMIT 20";
+$sql = "SELECT * FROM bills ORDER BY bills_datetime DESC LIMIT 20";
 $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>

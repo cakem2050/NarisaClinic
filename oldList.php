@@ -1,6 +1,6 @@
 <?php
     include "php/connect.php";
-    $sql = "SELECT * FROM customer ORDER BY cus_cdate LIMIT 20";
+    $sql = "SELECT * FROM customer ORDER BY cus_cdate DESC LIMIT 20";
     $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>

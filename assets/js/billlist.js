@@ -47,6 +47,13 @@ $(document).ready(function () {
                     $("#result-allprice").digits();
                     $("#final_price").text(sum);
                     $("#final_price").digits();
+                    //Set NO.
+                    var no_id = $("#tbody").children();
+                    var count=1;
+                    $.each(no_id,function (key,value) {
+                        $(this).children().first().text(count);
+                        count++;
+                    })
                 }
             });
             barcode = "";
@@ -91,6 +98,13 @@ $(document).ready(function () {
                     $("#price .input-group-addon").text('ชิ้น');
                     $("#final_price").text(sum - stale_money);
                     $("#final_price").digits();
+                    //Set NO.
+                    var no_id = $("#tbody").children();
+                    var count=1;
+                    $.each(no_id,function (key,value) {
+                        $(this).children().first().text(count);
+                        count++;
+                    })
                 }
             });
         } else {
@@ -448,5 +462,12 @@ $(document).delegate("#confirm_delete", "click", function () {
     $(tr).remove();
     $("#result-allprice").text(0);
     $("#final_price").text(0);
+    //Set NO.
+    var no_id = $("#tbody").children();
+    var count=1;
+    $.each(no_id,function (key,value) {
+        $(this).children().first().text(count);
+        count++;
+    })
 });
 
