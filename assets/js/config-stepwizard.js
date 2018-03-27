@@ -48,12 +48,15 @@ $(document).ready(function () {
         $('span[name="allprice"]').each(function () {
             sum += +$(this).text() || 0;
         });
-        var final_price = sum-price_stale;
-        $("#select1 input[type='number']").val(final_price);
-        $("#select2 input[type='number']").attr('max',final_price);
-        $("#select3 input[type='number']").val(final_price);
-        $('#content-pay').slideToggle();
-        $('#smartwizard').smartWizard("next");
-        return true;
+        var final_price = sum - price_stale;
+        var body = $("#tbody").children().prop("tagName");
+        if (body !== undefined) {
+            $('#content-pay').slideToggle();
+            $('#smartwizard').smartWizard("next");
+            return true;
+        }else{
+            $("#modelAdd").modal('show');
+            return true;
+        }
     });
 });

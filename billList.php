@@ -1,5 +1,4 @@
 <?php
-
 include "php/connect.php";
 $conn->exec("set names utf8");
 if (!isset($_GET['opd'])) {
@@ -32,7 +31,18 @@ if (!isset($_GET['opd'])) {
 <!-- WRAPPER -->
 <div id="wrapper">
     <aside id="aside">
-        <?php include "components/menu_staff.php" ?>
+        <?php
+        session_start();
+        if(isset($_SESSION['usr_level'])){
+            if($_SESSION['usr_level'] == "C"){
+                include "components/menu_staff.php";
+            }else{
+                header("location: /narisaclinic/login.php");
+            }
+        }else{
+            header("location: /narisaclinic/login.php");
+        }
+        ?>
     </aside>
     <!-- HEADER -->
     <?php include "components/header.php" ?>
@@ -57,7 +67,7 @@ if (!isset($_GET['opd'])) {
                                         </a></li>
                                     <li class="pull-right content-user">
                                         <span class="content-user-main"><b>ชื่อ : </b><span><?= $row['cus_name'] ?> <?= $row['cus_sname'] ?></span></span><br>
-                                        <b>เลข OPD : </b><span><?= $row['cus_opd'] ?></span><br>
+                                        <b>เลข OPD : </b><span id="cusid"><?= $row['cus_opd'] ?></span><br>
                                         <b>เบอร์โทรศัพท์ : </b><span><?= $row['cus_tel'] ?></span><br>
                                     </li>
                                 </ul>
@@ -108,7 +118,7 @@ if (!isset($_GET['opd'])) {
                                                             <td id="price">
                                                                 <div class="input-group">
                                                                     <input type="number" class="form-control"
-                                                                           placeholder="ราคา" disabled>
+                                                                           placeholder="ราคา" name="add-pro-price" disabled>
                                                                     <div class="input-group-addon">/ชิ้น</div>
                                                                 </div>
                                                             </td>
@@ -148,38 +158,38 @@ if (!isset($_GET['opd'])) {
                                         <div class="row">
                                             <div class="btn-group" data-toggle="buttons">
                                                 <div class="col-md-4">
-                                                    <label class="btn btn-default">
-                                                        <input type="radio" name="option" class="select1"
-                                                               autocomplete="off" style="">โอนเงินใน Clinic
+                                                    <label class="btn btn-default active">
+                                                        <input type="radio" name="option" class="select1" value="TC"
+                                                               autocomplete="off" style="" checked>โอนเงินใน Clinic
                                                     </label>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label class="btn btn-default">
-                                                        <input type="radio" name="option" class="select1"
+                                                        <input type="radio" name="option" class="select1" value="TO"
                                                                autocomplete="off" style="">โอนเงินนอก Clinic
                                                     </label>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label class="btn btn-default">
-                                                        <input type="radio" name="option" class="select1"
+                                                        <input type="radio" name="option" class="select1" value="TL"
                                                                autocomplete="off" style="">โอนเงิน Line @
                                                     </label>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label class="btn btn-default">
-                                                        <input type="radio" name="option" class="select1"
+                                                        <input type="radio" name="option" class="select1" value="CH"
                                                                autocomplete="off" style="">เงินสด
                                                     </label>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label class="btn btn-default">
-                                                        <input type="radio" name="option" class="select2"
+                                                        <input type="radio" name="option" class="select2" value="CC"
                                                                autocomplete="off" style="">เงินสด + Credit
                                                     </label>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label class="btn btn-default">
-                                                        <input type="radio" name="option" class="select3"
+                                                        <input type="radio" name="option" class="select3" value="CD"
                                                                autocomplete="off" style="">Credit
                                                     </label>
                                                 </div>
@@ -198,7 +208,7 @@ if (!isset($_GET['opd'])) {
                                                                     <div class="input-group">
                                                                         <div class="input-group-addon">จำนวนเงิน :</div>
                                                                         <input type="number" class="form-control"
-                                                                               placeholder="จำนวนเงิน">
+                                                                               placeholder="จำนวนเงิน" name="money-pay">
                                                                         <div class="input-group-addon">บาท</div>
                                                                     </div>
                                                                 </div>
@@ -230,7 +240,7 @@ if (!isset($_GET['opd'])) {
                                                                     <div class="input-group">
                                                                         <div class="input-group-addon">ธนาคาร : <?= $bank['bak_id'] ?> </div>
                                                                         <input type="number" class="form-control"
-                                                                               placeholder="จำนวนเงิน" id="bank-money">
+                                                                               placeholder="จำนวนเงิน" id="bank-<?= $bank['bak_id'] ?>">
                                                                         <div class="input-group-addon">บาท</div>
                                                                     </div>
                                                                         <?php
@@ -252,7 +262,7 @@ if (!isset($_GET['opd'])) {
                                                                         <div class="input-group">
                                                                             <div class="input-group-addon">ธนาคาร : <?= $bank['bak_id'] ?> </div>
                                                                             <input type="number" class="form-control"
-                                                                                   placeholder="จำนวนเงิน" id="bank-money">
+                                                                                   placeholder="จำนวนเงิน" id="bank-<?= $bank['bak_id'] ?>">
                                                                             <div class="input-group-addon">บาท</div>
                                                                         </div>
                                                                         <?php
@@ -294,11 +304,50 @@ if (!isset($_GET['opd'])) {
                                     <h4 class="modal-title" id="myModalLabel">กรุณาใส่ PassCode</h4>
                                 </div>
                                 <div class="modal-body">
-                                    <input type="text" name="passcode" class="form-control" >
+                                    <input type="text" name="passcode" class="form-control" placeholder="รหัส PassCode">
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" >ยืนยันการลบ</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="confirm_delete" data-delete="">ยืนยันการลบ</button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="modelError" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">เกิดข้อผิดพลาด</h4>
+                                </div>
+                                <div class="modal-body" align="center">
+                                    <h2>จำนวนเงินที่ชำระไม่ถูกต้อง</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="modelAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">เกิดข้อผิดพลาด</h4>
+                                </div>
+                                <div class="modal-body" align="center">
+                                    <h2>กรุณาทำรายการ</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="modelSuccess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">แจ้งเตือน</h4>
+                                </div>
+                                <div class="modal-body" align="center">
+                                    <h2>ทำรายการสำเร็จ</h2>
                                 </div>
                             </div>
                         </div>

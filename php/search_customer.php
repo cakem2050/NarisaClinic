@@ -7,8 +7,16 @@ $opd = $_POST['opd'];
 $phone = $_POST['phone'];
 
 $conn->exec("set names utf8");
-
-$sql = "SELECT * FROM customer WHERE cus_opd LIKE LOWER('".$opd."')";
+if($_POST['name'] != ''){
+    $f_name = explode(" ",$name);
+    if(isset($f_name[1])){
+        $sql = "SELECT * FROM customer WHERE cus_opd LIKE LOWER('".$opd."') OR cus_name LIKE '%".$f_name[0]."%' OR cus_sname LIKE '%".$f_name[1]."%' OR cus_tel = '".$phone."'";
+    }else{
+        $sql = "SELECT * FROM customer WHERE cus_opd LIKE LOWER('".$opd."') OR cus_name LIKE '%".$f_name[0]."%' OR cus_tel = '".$phone."'";
+    }
+}else{
+    $sql = "SELECT * FROM customer WHERE cus_opd LIKE LOWER('".$opd."')  OR cus_tel = '".$phone."'";
+}
 $result = $conn->query($sql);
 
 

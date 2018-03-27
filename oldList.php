@@ -1,3 +1,8 @@
+<?php
+    include "php/connect.php";
+    $sql = "SELECT * FROM customer ORDER BY cus_cdate LIMIT 20";
+    $result = $conn->query($sql);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,24 +101,20 @@
                             </tr>
                             </thead>
                             <tbody id="customer">
-                            <tr class="na-tr-select" onclick="window.location.href='index.php'">
-                                <td>1</td>
-                                <td>มานะ พบกิจ</td>
-                                <td>12/03/61 17.30</td>
-                                <td>700</td>
-                            </tr>
-                            <tr class="na-tr-select" onclick="window.location.href='index.php'">
-                                <td>2</td>
-                                <td>สุชาดา นิจทาพัน</td>
-                                <td>12/03/61 17.00</td>
-                                <td>1000</td>
-                            </tr>
-                            <tr class="na-tr-select" onclick="window.location.href='index.php'">
-                                <td>3</td>
-                                <td>ธาดา ชาวิชา</td>
-                                <td>12/03/61 16.45</td>
-                                <td>1200</td>
-                            </tr>
+                            <?php
+                            $count = 1;
+                                while ($row = $result->fetch()) {
+                                    ?>
+                                    <tr class="na-tr-select" onclick="window.location.href='billList.php?opd=<?= $row['cus_opd'] ?>'">
+                                        <td><?= $count ?></td>
+                                        <td><?= $row['cus_name'] ?> <?= $row['cus_sname'] ?></td>
+                                        <td><?= $row['cus_cdate'] ?></td>
+                                        <td><?= $row['cus_tel'] ?></td>
+                                    </tr>
+                                    <?php
+                                    $count++;
+                                }
+                            ?>
                             </tbody>
                         </table>
                         <div id="notFound"></div>

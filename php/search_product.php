@@ -5,7 +5,7 @@ $conn->exec("set names utf8");
 
     $product_id = $_GET['product_id'];
 
-    $sql = "SELECT * FROM product";
+    $sql = "SELECT * FROM product WHERE pro_id LIKE '%".$product_id."%'";
     $result = $conn->query($sql);
 
 

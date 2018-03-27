@@ -1,3 +1,8 @@
+<?php
+include "php/connect.php";
+$sql = "SELECT * FROM bills ORDER BY bills_datetime LIMIT 20";
+$result = $conn->query($sql);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,18 +16,18 @@
 <div id="wrapper">
     <aside id="aside">
         <?php
-            session_start();
-            if(isset($_SESSION['usr_level'])){
-                if($_SESSION['usr_level'] == "C"){
-                    include "components/menu_staff.php";
-                }elseif ($_SESSION['usr_level'] == "M"){
-                    include "components/menu_admin.php";
-                }else{
-                    header("location: /narisaclinic/login.php");
-                }
-            }else{
+        session_start();
+        if (isset($_SESSION['usr_level'])) {
+            if ($_SESSION['usr_level'] == "C") {
+                include "components/menu_staff.php";
+            } elseif ($_SESSION['usr_level'] == "M") {
+                include "components/menu_admin.php";
+            } else {
                 header("location: /narisaclinic/login.php");
             }
+        } else {
+            header("location: /narisaclinic/login.php");
+        }
         ?>
     </aside>
     <!-- HEADER -->
@@ -34,7 +39,7 @@
                 <a href="oldList.php" class="btn btn-info btn-lg na-btn-edit">คนไข้เก่า</a>
             </div>
             <div class="col-md-3">
-                <a href="#"  class="btn btn-default btn-lg na-btn-edit">คนไข้ใหม่</a>
+                <a href="saveNewCustomer.php" class="btn btn-default btn-lg na-btn-edit">คนไข้ใหม่</a>
             </div>
         </div>
         <!-- /page title -->
@@ -74,36 +79,43 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>มานะ พบกิจ</td>
-                                <td>12/03/61 17.30</td>
-                                <td>700</td>
-                                <td>200</td>
-                                <td>500</td>
-                                <td>โอน clinic</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>สุชาดา นิจทาพัน</td>
-                                <td>12/03/61 17.00</td>
-                                <td>1000</td>
-                                <td>10%</td>
-                                <td>900</td>
-                                <td>เงินสด+credit</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>ธาดา ชาวิชา</td>
-                                <td>12/03/61 16.45</td>
-                                <td>1200</td>
-                                <td>200</td>
-                                <td>900</td>
-                                <td>โอน Line@</td>
-                                <td>100</td>
-                            </tr>
+                            <?php
+                            $count = 1;
+                            while ($row = $result->fetch()) {
+                                $sql_cus = "SELECT * FROM customer WHERE cus_opd = '" . $row['cus_opd'] . "'";
+                                $result_cus = $conn->query($sql_cus);
+                                $row_cus = $result_cus->fetch();
+                                ?>
+                                <tr>
+                                    <td><?= $count ?></td>
+                                    <td><?= $row_cus['cus_name'] ?> <?= $row_cus['cus_sname'] ?></td>
+                                    <td><?= $row['bills_datetime'] ?></td>
+                                    <td><?= $row['bills_pay'] ?></td>
+                                    <td><?= $row['bills_discount'] ?></td>
+                                    <td><?= $row['bills_net'] ?></td>
+                                    <td>
+                                        <?php
+                                        if ($row['bills_ptype'] == 'TC') {
+                                            echo "โอนที่ clinic";
+                                        } elseif ($row['bills_ptype'] == 'TO') {
+                                            echo "โอนนอก clinic";
+                                        } elseif ($row['bills_ptype'] == 'TL') {
+                                            echo "โอนLine@";
+                                        } elseif ($row['bills_ptype'] == 'CH') {
+                                            echo "เงินสด";
+                                        } elseif ($row['bills_ptype'] == 'CC') {
+                                            echo "เงินสด+credit";
+                                        } elseif ($row['bills_ptype'] == 'CD') {
+                                            echo "credit";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td><?= $row['bills_ost'] ?></td>
+                                </tr>
+                                <?php
+                                $count++;
+                            }
+                            ?>
                             </tbody>
                         </table>
                     </div>

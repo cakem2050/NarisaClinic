@@ -29,7 +29,7 @@ if (isset($_POST['action'])) {
             'pro_name' => $_POST['pro_name'],
             'pro_unit' => $_POST['pro_unit-sub'],
             'bild_value' => $_POST['amount'],
-            'bild_price' => $_POST['pro-price'],
+            'bild_price' => $_POST['add-pro-price'],
             'bild_discount' => $discount,
             'total'=> ($_POST['amount']*$_POST['pro-price'])-$discount,
         ];
@@ -52,19 +52,19 @@ if (isset($_POST['action'])) {
         }
         //($items['bild_value']*$items['bild_price'])
         print_r($items);
-        echo "<tr>
+        echo "<tr name='".$items['pro_id']."-".$count."'>
                     <td>".$count."</td>
-                    <td><input type=\"text\" class=\"form-control\" value='".$items['pro_id']."' disabled></td>
-                    <td>".$items['pro_name']."</td>
+                    <td><input name='pro_id' type=\"text\" class=\"form-control\" value='".$items['pro_id']."' disabled></td>
+                    <td name='pro_name'>".$items['pro_name']."</td>
                     <td name='td-price'><div class=\"input-group\">
-                    <input class='form-control price' type='number' name='price' value='" . $items['bild_value'] . "'>
+                    <input class='form-control price' type='number' name='price' value='" . $items['bild_price'] . "'>
                     <div class=\"input-group-addon\">/" . $items['pro_unit'] . "</div></div></td>
                     <td name='td-amount'><input type=\"number\" name='i-amount' class=\"form-control\" value='".$items['bild_value']."' ></td>
                     <td name='td-discount-pre'><input type=\"number\" name='i-discount-pre' class=\"form-control\" value='".$discount_pre."' ></td>
                     <td name='td-discount'><input type=\"number\" name='i-discount' class=\"form-control\" value='".$discount."' ></td>
                     <td name='td-allprice'><span name='allprice'>".$items['total']."</span></td>
                     <td>
-                        <button type='button' class=\"btn btn-danger btn-sm\" name='btn-delete'>
+                        <button type='button' class=\"btn btn-danger btn-sm\" data-deletepro='".$items['pro_id']."-".$count."' name='btn-delete'>
                             <i class=\"glyphicon glyphicon-trash\"></i>ยกเลิกรายการ
                         </button>
                     </td>
