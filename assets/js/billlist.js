@@ -460,8 +460,15 @@ $(document).delegate("#confirm_delete", "click", function () {
     var id_pro = $(this).attr('data-delete');
     var tr = "tr[name='" + id_pro + "']";
     $(tr).remove();
-    $("#result-allprice").text(0);
-    $("#final_price").text(0);
+    var sum = 0;
+    $('span[name="allprice"]').each(function () {
+        sum += +$(this).text() || 0;
+    });
+    var stale_money = $("#stale-money").val();
+    $("#result-allprice").text(sum);
+    $("#result-allprice").digits();
+    $("#final_price").text(sum - stale_money);
+    $("#final_price").digits();
     //Set NO.
     var no_id = $("#tbody").children();
     var count=1;
