@@ -32,14 +32,6 @@
     <?php include "components/header.php" ?>
     <!-- /HEADER -->
     <section id="middle" style="margin-left: 0px;">
-        <!-- page title -->
-        <header id="page-header">
-            <h1>Counter Narisa</h1>
-            <ol class="breadcrumb">
-                <li><a href="#">หน้าแรก</a></li>
-                <li class="active">ทำรายการ</li>
-            </ol>
-        </header>
 
         <div id="content" class="padding-20 na-pd-b-0">
             <div id="panel-1" class="panel panel-default">
