@@ -305,9 +305,12 @@ if (!isset($_GET['opd'])) {
                                 </div>
                                 <div class="modal-body">
                                     <input type="text" name="passcode" class="form-control" placeholder="รหัส PassCode">
+                                    <div id="passcode-text" style="color: red" class="hide">
+                                        รหัส Passcode ไม่ถูกต้อง
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="confirm_delete" data-delete="">ยืนยันการลบ</button>
+                                    <button type="button" class="btn btn-danger" id="confirm_delete" data-delete="">ยืนยันการลบ</button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
                                 </div>
                             </div>

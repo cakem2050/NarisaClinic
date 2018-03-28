@@ -459,22 +459,38 @@ $(document).delegate("button[name='btn-delete']", "click", function () {
 $(document).delegate("#confirm_delete", "click", function () {
     var id_pro = $(this).attr('data-delete');
     var tr = "tr[name='" + id_pro + "']";
-    $(tr).remove();
-    var sum = 0;
-    $('span[name="allprice"]').each(function () {
-        sum += +$(this).text() || 0;
+    $.ajax({
+        url:"php/checkPasscode.php",
+        type:"POST",
+        data:{
+            passcode:$("input[name='passcode']").val(),
+        },
+        success:function (data) {
+            if(data==='false'){
+                $("#passcode-text").removeClass('hide');
+            }else{
+                $('#modelDelete').modal('toggle');
+                $("#passcode-text").addClass('hide');
+                $(tr).remove();
+                var sum = 0;
+                $('span[name="allprice"]').each(function () {
+                    sum += +$(this).text() || 0;
+                });
+                var stale_money = $("#stale-money").val();
+                $("#result-allprice").text(sum);
+                $("#result-allprice").digits();
+                $("#final_price").text(sum - stale_money);
+                $("#final_price").digits();
+                //Set NO.
+                var no_id = $("#tbody").children();
+                var count=1;
+                $.each(no_id,function (key,value) {
+                    $(this).children().first().text(count);
+                    count++;
+                });
+            }
+        }
     });
-    var stale_money = $("#stale-money").val();
-    $("#result-allprice").text(sum);
-    $("#result-allprice").digits();
-    $("#final_price").text(sum - stale_money);
-    $("#final_price").digits();
-    //Set NO.
-    var no_id = $("#tbody").children();
-    var count=1;
-    $.each(no_id,function (key,value) {
-        $(this).children().first().text(count);
-        count++;
-    })
+
 });
 
