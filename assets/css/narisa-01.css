@@ -128,8 +128,8 @@ h3{
 }
 .btn-group .btn.active{
     color: #fff;
-    background-color: #5bc0de;
-    border-color: #46b8da;
+    background-color: #d9534f;
+    border-color: #d9534f;
 }
 .btn-group .btn{
     font-size: 30px !important;

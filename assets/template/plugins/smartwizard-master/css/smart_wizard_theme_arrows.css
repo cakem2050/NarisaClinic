@@ -113,12 +113,12 @@
 	background: #46b8da !important;
 }
 .sw-theme-arrows > ul.step-anchor > li.active > a {
-    border-color: #5bc0de !important;
+    border-color: #d9534f  !important;
     color: #fff !important;
-	background: #5bc0de !important;
+	background: #d9534f  !important;
 }
 .sw-theme-arrows > ul.step-anchor > li.active > a:after {
-	border-left: 30px solid #5bc0de !important;
+	border-left: 30px solid #d9534f  !important;
 }
 .sw-theme-arrows > ul.step-anchor > li.done > a {
     border-color: #5cb85c !important;

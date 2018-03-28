@@ -31,11 +31,11 @@
 	#aside .logo,
 	body.min #asidesize,
 	#aside, #asidebg {
-		background-color: #4b964b;
+		background-color: #5cb85c;
 	}
 	
 	body.min #aside ul.nav>li:hover:before {
-		border-right-color: #762629;
+		border-right-color: #d9534f;
 	}
 
 	.panel>.panel-heading strong {
@@ -56,15 +56,25 @@
 	.btn-primary,
 	.alert-theme-color,
 	.panel-primary>.panel-heading {
-		background-color: #4b5354 !important;
+		background-color: #d9534f !important;
 	}
 	.panel-primary,
 	.panel-primary>.panel-heading {
-		border-color: #4b5354 !important;
+		border-color: #d9534f !important;
 	}
 	
 	@media only screen and (min-width: 768px) {
 		body.min #aside ul.nav>li:hover>a span {
-			background-color: #93262b;
+			background-color: #d9534f;
 		}
 	}
+
+.btn-teal {
+	background-color: #5cb85c !important;
+	color: #FFF !important;
+}
+.btn-info{
+	background-color: #5cb85c !important;
+	color: #FFF !important;
+
+}
