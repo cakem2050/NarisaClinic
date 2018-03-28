@@ -36,11 +36,11 @@
 
                         </div>
                         <div class="panel-body">
-                            <form class="validate" action="php/contact.php" method="post" enctype="multipart/form-data" data-success="Sent! Thank you!" data-toastr-position="top-right">
+                            <form class="" action="reportMedicine.php" method="get" enctype="multipart/form-data" data-success="Sent! Thank you!" data-toastr-position="top-right">
                                 <fieldset>
                                     <div class="row">
                                         <div class="col-md-3 col-sm-3">
-                                            <input type="text" placeholder="วันที่ค้นหา" name="contact[opd]" value="" class="form-control required">
+                                            <input type="date" placeholder="วันที่ค้นหา" name="date" value="" class="form-control">
                                         </div>
                                         <div class="col-md-2 col-sm-2">
                                             <button type="submit" class="btn btn-3d btn-teal btn-ms btn-block">
@@ -60,50 +60,56 @@
                                         <th width="10%">จำนวน</th>
                                     </tr>
                                     </thead>
+                                    <?php
+                                        $result_row = 1;
+                                    if(isset($_GET['date']) && $_GET['date'] != ""){
+                                        include "php/connect.php";
+                                        include "php/func.php";
+                                        $op = new func();
+                                        $date = "".$_GET["date"]."%";
+                                        $sql_pro = "SELECT * FROM product WHERE pro_status ='E'";
+                                        $stmt_pro = $conn->prepare($sql_pro);
+                                        $stmt_pro->execute(array(':datecheck'=>$date));
+                                        $i = 1;
+                                        while($result = $stmt_pro->fetch( PDO::FETCH_ASSOC )){
+                                    ?>
                                     <tbody>
                                         <tr>
-                                            <td>1</td>
-                                            <td>9859843584385094385</td>
-                                            <td>พารา</td>
-                                            <td>500</td>
+                                            <td><?=$i?></td>
+                                            <td><?=$result['pro_id']?></td>
+                                            <td><?=$result['pro_name']?></td>
+                                            <?php
+                                                $sql_prc = "SELECT SUM(bild_value) FROM billsdetail WHERE bild_timestamp LIKE :datecheck AND bild_status = 'E' AND pro_id = :pro_id";
+                                                $stmt_prc = $conn->prepare($sql_prc);
+                                                $stmt_prc->execute(array(':datecheck'=>$date,'pro_id'=>$result['pro_id']));
+                                                while($result_prc = $stmt_prc->fetch( PDO::FETCH_ASSOC )){
+                                                    echo "<td>".$result_prc['SUM(bild_value)']."</td>";
+                                                }
+                                            ?>
                                         </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>9859843584385094385</td>
-                                            <td>พารา</td>
-                                            <td>500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>9859843584385094385</td>
-                                            <td>พารา</td>
-                                            <td>500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>9859843584385094385</td>
-                                            <td>พารา</td>
-                                            <td>500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>9859843584385094385</td>
-                                            <td>พารา</td>
-                                            <td>500</td>
-                                        </tr>
-
+                                        <?php
+                                            $result_row++;
+                                            $i++;
+                                            }
+                                        ?>
                                     </tbody>
+                                    <?php
+                                        }
+                                    ?>
                                 </table>
+
                             </div>
-                            <div class="row margin-top-20">
-                                <div class="col-md-5 col-sm-5">
-                                </div>
-                                <div class="col-md-2 col-sm-2">
-                                    <button type="submit" class="btn btn-3d btn-teal btn-ms btn-block">
-                                        <i class="fa fa-download"></i>PRINT
-                                    </button>
-                                </div>
-                                <div class="col-md-5 col-sm-5">
+                            <div class="row">
+                                <div class="col-md-2 col-sm-2 pull-right margin-top-20">
+                                    <?php
+                                    if(isset($_GET['date']) && $_GET['date'] != "" && $result_row != 1) {
+                                        ?>
+                                        <a href="php/pdf/medicine.php?date=<?=$_GET['date']?>" class="btn btn-3d btn-teal btn-ms btn-block" id="print">
+                                            <i class="fa fa-download"></i>ปริ้น
+                                        </a>
+                                        <?php
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>

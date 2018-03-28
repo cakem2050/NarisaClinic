@@ -28,7 +28,7 @@ $usr_level ="F";
         $_SESSION['usr_name'] = $usr_name;
 
         if($usr_level == "M"){
-            header("location: /narisaclinic/home.php");
+            header("location: /narisaclinic/reportInClinic.php");
         }
         if($usr_level == "C"){
             header("location: /narisaclinic/home.php");

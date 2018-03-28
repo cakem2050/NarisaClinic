@@ -1,20 +1,5 @@
 <nav id="sideNav"><!-- MAIN MENU -->
     <ul class="nav nav-list">
-        <li><!-- dashboard -->
-            <a class="dashboard" href="index.php"><!-- warning - url used by default by ajax (if eneabled) -->
-                <i class="main-icon fa fa-home"></i> <span>หน้าหลัก</span>
-            </a>
-        </li>
-        <li>
-            <a href="../narisaclinic/saveNewCustomer.php">
-                <i class="main-icon fa fa-edit"></i> <span>บันทึกข้อมูลคนไข้</span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <i class="main-icon fa fa-user"></i> <span>ประวัติคนไข้</span>
-            </a>
-        </li>
         <li>
             <a href="#">
                 <i class="fa fa-menu-arrow pull-right"></i>
