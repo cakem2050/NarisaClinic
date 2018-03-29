@@ -78,3 +78,7 @@
 	color: #FFF !important;
 
 }
+
+nav>ul>li>a:hover{
+	background-color:#d9534f !important;
+}
