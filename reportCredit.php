@@ -120,6 +120,10 @@
                                             <td><?php
                                                 if($result['bills_status'] == "D"){
                                                     echo "<span style='color: #bf6464;'>รายการที่ถูกยกเลิก</span>";
+                                                }else{
+                                                    echo "<button type=\"button\" class=\"btn btn-danger btn-sm get_id\" data='".$result['bills_id']."' data-toggle=\"modal\" data-target=\"#exampleModal\">
+                            <i class=\"glyphicon glyphicon-trash\"></i>ยกเลิกรายการ
+                        </button>";
                                                 }
                                                 ?></td>
                                         </tr>
@@ -176,8 +180,32 @@
         </div>
     </section>
     <!-- /MIDDLE -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">กรุณาใส่ PassCode</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="passcode" name="passcode" class="form-control" placeholder="รหัส PassCode">
+                    <input type="hidden" id="bills_id" value="">
+                    <input type="hidden" id="location" value="reportCredit">
+                    <input type="hidden" id="date" value="<?=$_GET['date']?>">
+                    <div id="passcode-text" style="color: red" class="hide">
+                        รหัส Passcode ไม่ถูกต้อง
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="get_pass" data-delete="">ยืนยันการลบ</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 <?php include "components/template_js.php"; ?>
+<script type="text/javascript" src="assets/js/narisa-01.js"></script>
 </body>
 </html>

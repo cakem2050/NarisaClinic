@@ -6,6 +6,7 @@
     <!-- Logo -->
     <span class="logo pull-left">
         <img src="assets/images/logo_light.png" alt="admin panel" height="35" class="na-logo"/>
+
     </span>
 
 
@@ -38,9 +39,18 @@
                     </li>
                 </ul>
             </li>
+
             <!-- /USER OPTIONS -->
 
         </ul>
+        <p class="pull-right" style="color: white;font-weight: bold;"> <?php
+            if(isset($_SESSION['usr_level']) && $_SESSION['usr_level'] == "M"){
+                include "php/passcode.php";
+                $date = date("d/m/Y");
+                echo "PassCode ประจำวันที่ ".$date." : ".passcode();
+            }
+
+            ?></p>
         <!-- /OPTIONS LIST -->
 
     </nav>

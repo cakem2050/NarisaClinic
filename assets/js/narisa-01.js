@@ -92,4 +92,39 @@ $(document).ready(function() {
     });
 
 
+    $('#get_pass').click(function () {
+        var location = $('#location').val();
+        var date = $('#date').val();
+        var id = $('#bills_id').val();
+        var pass = $('#passcode').val();
+        $.ajax({
+            url: 'php/checkPasscode.php',
+            data:{'passcode':pass},
+            type: "post",
+            success: function (data) {
+                if(data){
+                    if(data == "false"){
+                        $("#passcode-text").removeClass('hide');
+                    }else{
+                        $.ajax({
+                            url: 'php/change_status.php',
+                            data: {'bills_id': id},
+                            type: "post",
+                            success: function (data2) {
+                                if(data2){
+                                    window.location.replace("../narisaclinic/"+location+".php?date="+date);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    });
+
+    $('.get_id').click(function () {
+        var id = $(this).attr("data");
+        $('#bills_id').val(id);
+    });
+
 });
