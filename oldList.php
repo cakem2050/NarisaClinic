@@ -100,7 +100,7 @@
                                     <tr class="na-tr-select" onclick="window.location.href='billList.php?opd=<?= $row['cus_opd'] ?>'">
                                         <td><?= $count ?></td>
                                         <td><?= $row['cus_name'] ?> <?= $row['cus_sname'] ?></td>
-                                        <td><?= $row['cus_cdate'] ?></td>
+                                        <td><?= $row['cus_opd'] ?></td>
                                         <td><?= $row['cus_tel'] ?></td>
                                     </tr>
                                     <?php
