@@ -1,7 +1,19 @@
 <?php
 include "php/connect.php";
-$sql = "SELECT * FROM bills ORDER BY bills_datetime DESC LIMIT 20";
+date_default_timezone_set("Asia/Bangkok");
+$sql = "SELECT * FROM bills where day(`bills_timestamp`) = ".date("d")." AND month(`bills_timestamp`) = ".date("m")." AND  Year(`bills_timestamp`)= ".date("Y")." ORDER BY bills_datetime DESC LIMIT 20";
 $result = $conn->query($sql);
+function date_bu($para) {
+    $data = $para;
+    $data =  substr($data,0,16);
+    $year = substr($data,0,4);
+    $month = substr($data,5,2);
+    $day = substr($data,8,2);
+    $datecut = substr($data,0,10);
+    $date = $day."/".$month."/".($year+543);
+    $date2 = str_replace($datecut,$date,$data);
+    return $date2;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -89,7 +101,7 @@ $result = $conn->query($sql);
                                 <tr>
                                     <td><?= $count ?></td>
                                     <td><?= $row_cus['cus_name'] ?> <?= $row_cus['cus_sname'] ?></td>
-                                    <td><?= $row['bills_datetime'] ?></td>
+                                    <td><?= date_bu($row['bills_datetime']) ?></td>
                                     <td><?= $row['bills_pay'] ?></td>
                                     <td><?= $row['bills_discount'] ?></td>
                                     <td><?= $row['bills_net'] ?></td>

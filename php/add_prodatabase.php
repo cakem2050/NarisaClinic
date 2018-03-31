@@ -4,9 +4,13 @@ session_start();
 include "connect.php";
 $date = new DateTime;
 $date->setTimezone(new DateTimeZone("Asia/Bangkok"));
-$time = $date->format('Y-m-d H:i:s');
-$time_id = $date->format('dmY');
-
+$year = date('Y')+543;
+$time_temp = $date->format('m-d H:i:s');
+$timestamp = $date->format('Y-m-d H:i:s');
+$time_str = $year."-".$time_temp;
+$time = $time_str;
+$time_id_temp = $date->format('dm');
+$time_id = $time_id_temp.$year;
 
 //SET $bills_id
 $bills_no = null;
@@ -80,7 +84,7 @@ foreach ($items as $key => $value) {
         'bild_status' => 'E',
         'bild_passcode' => '',
         'usr_uname' => $_SESSION['usr_name'],
-        'bild_timestamp' => $time,
+        'bild_timestamp' => $timestamp,
     ];
     array_push($items_array, $billDetail);
 }
@@ -102,7 +106,7 @@ $billMater = [
     'bills_bay' => $type_pay['bills_bay'],
     'bills_status' => 'E',
     'usr_uname' => $_SESSION['usr_name'],
-    'bills_timestamp' => $time
+    'bills_timestamp' => $timestamp
 ];
 try {
 // Insert Bill Mater To Database

@@ -6,13 +6,15 @@ $(document).ready(function () {
         if (stepNumber === 0) {
             $("#summary").addClass('col-md-offset-8');
             $("#prev-btn").addClass('disabled').attr("disabled", "disabled");
-            $("#next-btn").removeAttr("disabled").removeClass("disabled");
-            $("#success-btn").addClass('disabled').attr("disabled", "disabled");
+            $("#next-btn").removeAttr("disabled").removeClass("disabled hide");
+            $("#success-btn").addClass('disabled hide').attr("disabled", "disabled");
+            $("#stale-money").removeClass('disabled').attr("disabled", false);
         } else if (stepNumber === 1) {
+            $("#stale-money").addClass('disabled').attr("disabled", true);
             $("#summary").removeClass('col-md-offset-8');
-            $("#next-btn").addClass('disabled').attr("disabled", "disabled");
+            $("#next-btn").addClass('disabled hide').attr("disabled", "disabled");
             $("#prev-btn").removeClass("disabled").attr("disabled", false);
-            $("#success-btn").removeClass('disabled').removeAttr("disabled", "disabled");
+            $("#success-btn").removeClass('disabled hide').removeAttr("disabled", "disabled");
         } else if (stepNumber === 2) {
             $("#prev-btn").addClass("disabled").attr("disabled", "disabled");
         }
@@ -51,6 +53,7 @@ $(document).ready(function () {
         var final_price = sum - price_stale;
         var body = $("#tbody").children().prop("tagName");
         if (body !== undefined) {
+            $('#select1 input').val(final_price);
             $('#content-pay').slideToggle();
             $('#smartwizard').smartWizard("next");
             return true;
