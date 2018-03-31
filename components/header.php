@@ -46,8 +46,8 @@
         <p class="pull-right" style="color: white;font-weight: bold;"> <?php
             if(isset($_SESSION['usr_level']) && $_SESSION['usr_level'] == "M"){
                 include "php/passcode.php";
-                $date = date("d/m/Y");
-                echo "PassCode ประจำวันที่ ".$date." : ".passcode();
+                $dt = new DateTime("now", new DateTimeZone('Asia/Bangkok'));
+                echo "PassCode ประจำวันที่ ".$dt->format('d/m/Y')." : ".passcode();
             }
 
             ?></p>

@@ -10,10 +10,10 @@
 include "../connect.php";
 include  "../../vendor/autoload.php";
 include "../func.php";
-$op = new func();
-$date = $_GET['date'];
+$op3 = new func3();
+$date = $op3->date($_GET['date'])."%";
 echo $date;
-$report_date = $op->date($date);
+$report_date = $_GET['date'];
 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
 $content = "<style>
 .container,th,td,h1{
@@ -36,6 +36,7 @@ table {
     color: #bf6464;
 }
 </style>
+<h1 class='sum' style='font-size: 20px;'>Narisa Clinic</h1>
 <h1>รายงานสรุปการขายยา ประจำวันที่ ".$report_date."</h1>
 <div class='container'>
     <table>
@@ -49,10 +50,9 @@ table {
         </thead>
         <tbody>
     ";
-$date = "".$_GET["date"]."%";
 $sql_pro = "SELECT * FROM product WHERE pro_status ='E'";
 $stmt_pro = $conn->prepare($sql_pro);
-$stmt_pro->execute(array(':datecheck'=>$date));
+$stmt_pro->execute(array(':datecheck' => $date));
 $i = 1;
 while($result = $stmt_pro->fetch( PDO::FETCH_ASSOC )) {
 

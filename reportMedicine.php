@@ -11,13 +11,14 @@
     <aside id="aside">
         <?php
         session_start();
-        if(isset($_SESSION['usr_level'])){
-            if($_SESSION['usr_level'] == "M"){
+        if (isset($_SESSION['usr_level'])) {
+            if ($_SESSION['usr_level'] == "M") {
                 include "components/menu_admin.php";
-            }else{
+                include "php/func.php";
+            } else {
                 header("location: /narisaclinic/login.php");
             }
-        }else{
+        } else {
             header("location: /narisaclinic/login.php");
         }
         ?>
@@ -25,22 +26,31 @@
     <!-- HEADER -->
     <?php include "components/header.php" ?>
     <!-- /HEADER -->
-    <section id="middle"  style="margin-left: 0px;">
+    <section id="middle" style="margin-left: 0px;">
         <!-- /page title -->
         <div id="content" class="padding-20">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-heading panel-heading-transparent">
-                            <strong>รายงานสรุปการขายยา ประจำวัน</strong>
+                            <strong>รายงานสรุปการขายยา ประจำวัน <?php
+                                if (isset($_GET['date'])) {
+                                    echo "ประจำวันที่ " . $_GET['date'];
+//                                $op2 = new func2();
+//                                $data2 = $op2->date($_GET['date']);
+//                                echo $data2;
+                                }
+                                ?></strong>
 
                         </div>
                         <div class="panel-body">
-                            <form class="" action="reportMedicine.php" method="get" enctype="multipart/form-data" data-success="Sent! Thank you!" data-toastr-position="top-right">
+                            <form class="" action="reportMedicine.php" method="get" enctype="multipart/form-data"
+                                  data-success="Sent! Thank you!" data-toastr-position="top-right">
                                 <fieldset>
                                     <div class="row">
-                                        <div class="col-md-3 col-sm-3">
-                                            <input type="date" placeholder="วันที่ค้นหา" name="date" value="" class="form-control">
+                                        <div class="col-md-2 col-sm-2">
+                                            <input id="inputdatepicker" class="datepicker form-control" name="date"
+                                                   data-date-format="dd-mm-yyyy">
                                         </div>
                                         <div class="col-md-2 col-sm-2">
                                             <button type="submit" class="btn btn-3d btn-teal btn-ms btn-block">
@@ -50,68 +60,81 @@
                                     </div>
                                 </fieldset>
                             </form>
-                            <div class="table-responsive">
-                                <table class="table table-bordered nomargin">
-                                    <thead>
-                                    <tr>
-                                        <th width="5%">ลำดับ</th>
-                                        <th width="20%">รหัส barcode</th>
-                                        <th>ชื่อยา</th>
-                                        <th width="10%">จำนวน</th>
-                                    </tr>
-                                    </thead>
-                                    <?php
-                                        $result_row = 1;
-                                    if(isset($_GET['date']) && $_GET['date'] != ""){
-                                        include "php/connect.php";
-                                        include "php/func.php";
-                                        $op = new func();
-                                        $date = "".$_GET["date"]."%";
-                                        $sql_pro = "SELECT * FROM product WHERE pro_status ='E'";
-                                        $stmt_pro = $conn->prepare($sql_pro);
-                                        $stmt_pro->execute(array(':datecheck'=>$date));
-                                        $i = 1;
-                                        while($result = $stmt_pro->fetch( PDO::FETCH_ASSOC )){
+                            <?php
+                            $result_row = 1;
+                            if (isset($_GET['date']) && $_GET['date'] != "") {
+                                include "php/connect.php";
+                                $op = new func();
+                                $op3 = new func3();
+                                $data2 = $op3->date($_GET['date']);
+                                $date = "" . $data2 . "%";
+                                $sql_pro = "SELECT * FROM product WHERE pro_status ='E'";
+                                $stmt_pro = $conn->prepare($sql_pro);
+                                $stmt_pro->execute(array(':datecheck' => $date));
+                                if ($stmt_pro->rowCount() == 0) {
                                     ?>
-                                    <tbody>
-                                        <tr>
-                                            <td><?=$i?></td>
-                                            <td><?=$result['pro_id']?></td>
-                                            <td><?=$result['pro_name']?></td>
-                                            <?php
-                                                $sql_prc = "SELECT SUM(bild_value) FROM billsdetail WHERE bild_timestamp LIKE :datecheck AND bild_status = 'E' AND pro_id = :pro_id";
-                                                $stmt_prc = $conn->prepare($sql_prc);
-                                                $stmt_prc->execute(array(':datecheck'=>$date,'pro_id'=>$result['pro_id']));
-                                                while($result_prc = $stmt_prc->fetch( PDO::FETCH_ASSOC )){
-                                                    echo "<td>".$result_prc['SUM(bild_value)']."</td>";
-                                                }
-                                            ?>
-                                        </tr>
-                                        <?php
-                                            $result_row++;
-                                            $i++;
-                                            }
-                                        ?>
-                                    </tbody>
+                                    <h3 style="color: #bf6464;" class="text-center">"ไม่พบข้อมูล"</h3>
                                     <?php
-                                        }
-                                    ?>
-                                </table>
 
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2 col-sm-2 pull-right margin-top-20">
-                                    <?php
-                                    if(isset($_GET['date']) && $_GET['date'] != "" && $result_row != 1) {
-                                        ?>
-                                        <a href="php/pdf/medicine.php?date=<?=$_GET['date']?>" class="btn btn-3d btn-teal btn-ms btn-block" id="print">
-                                            <i class="fa fa-download"></i>ปริ้น
-                                        </a>
-                                        <?php
-                                    }
+                                } else {
+
                                     ?>
-                                </div>
-                            </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered nomargin">
+                                            <thead>
+                                            <tr>
+                                                <th width="5%">ลำดับ</th>
+                                                <th width="20%">รหัส barcode</th>
+                                                <th>ชื่อยา</th>
+                                                <th width="10%">จำนวน</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            <?php
+                                            $i = 1;
+                                            while ($result = $stmt_pro->fetch(PDO::FETCH_ASSOC)) {
+                                                ?>
+                                                <tr>
+                                                    <td><?= $i ?></td>
+                                                    <td><?= $result['pro_id'] ?></td>
+                                                    <td><?= $result['pro_name'] ?></td>
+                                                    <?php
+                                                    $sql_prc = "SELECT SUM(bild_value) FROM billsdetail WHERE bild_timestamp LIKE :datecheck AND bild_status = 'E' AND pro_id = :pro_id";
+                                                    $stmt_prc = $conn->prepare($sql_prc);
+                                                    $stmt_prc->execute(array(':datecheck' => $date, 'pro_id' => $result['pro_id']));
+                                                    while ($result_prc = $stmt_prc->fetch(PDO::FETCH_ASSOC)) {
+                                                        echo "<td>" . $result_prc['SUM(bild_value)']."</td>";
+                                                    }
+                                                    ?>
+                                                </tr>
+                                                <?php
+                                                $result_row++;
+                                                $i++;
+                                            }
+                                            ?>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2 col-sm-2 pull-right margin-top-20">
+                                            <?php
+                                            if (isset($_GET['date']) && $_GET['date'] != "" && $result_row != 1) {
+                                                ?>
+                                                <a href="php/pdf/medicine.php?date=<?= $_GET['date'] ?>"
+                                                   class="btn btn-3d btn-teal btn-ms btn-block" id="print">
+                                                    <i class="fa fa-download"></i>ปริ้น
+                                                </a>
+                                                <?php
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <?php
+                                }
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -122,5 +145,18 @@
 
 </div>
 <?php include "components/template_js.php"; ?>
+<script src="assets/template/plugins/jquery/jquery-2.1.4.min.js"></script>
+<script src="dist/js/bootstrap-datepicker-custom.js"></script>
+<script src="dist/locales/bootstrap-datepicker.th.min.js" charset="UTF-8"></script>
+<script>
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            todayBtn: true,
+            language: 'th',             //เปลี่ยน label ต่างของ ปฏิทิน ให้เป็น ภาษาไทย   (ต้องใช้ไฟล์ bootstrap-datepicker.th.min.js นี้ด้วย)
+            thaiyear: true              //Set เป็นปี พ.ศ.
+        }).datepicker("setDate", "0");  //กำหนดเป็นวันปัจุบัน
+    });
+</script>
 </body>
 </html>

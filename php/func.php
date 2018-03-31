@@ -21,5 +21,25 @@
             return $date2;
         }
     }
+    class func2 {
+        function date($para) {
+            $data = $para;
+            $year = substr($data,6,4);
+            $month = substr($data,3,2);
+            $day = substr($data,0,2);
+            $date = $year."-".$month."-".$day;
+            return $date;
+        }
+    }
+    class func3 {
+        function date($para) {
+            $data = $para;
+            $year = substr($data,6,4)-543;
+            $month = substr($data,3,2);
+            $day = substr($data,0,2);
+            $date = $year."-".$month."-".$day;
+            return $date;
+        }
+    }
 ?>
 

@@ -10,13 +10,12 @@
 include "../connect.php";
 include  "../../vendor/autoload.php";
 include "../func.php";
-$op = new func();
-$date = $_GET['date'];
-echo $date;
-$report_date = $op->date($date);
+$op2 = new func2();
+$date = $op2->date($_GET['date'])."%";
+$report_date = $_GET['date'];
 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
 $content = "<style>
-.container,th,td,h1{
+.container,th,td,h1,span{
     font-family: 'Garuda';
     font-size: 12pt;
 }
@@ -48,13 +47,13 @@ right: 10px;
     float: right;
 }
 </style>
+<h1 class='sum' style='font-size: 20px;'>Narisa Clinic</h1>
 <h1>รายงานสรุปการเงิน ".$report_date."</h1>
 <div class='container'>
     <table width='700px'>
         <tbody>
     ";
 include "php/connect.php";
-$date = "".$_GET["date"]."%";
 
 $sql_tc = "SELECT SUM(bills_net) FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'TC'";
 $pay_tc = $conn->prepare($sql_tc);
@@ -168,6 +167,8 @@ $content = $content."
         </tbody>
     </table>
 </div>";
+$result_all = $sum + $result_ch_cop + $sum_credit;
+$content = $content."<span>รวมรายได้วันที่ ".$report_date." ทั้งสิน ".$result_all." บาท</span>";
 $mpdf->WriteHTML($content);
 $mpdf->Output();
 ?>

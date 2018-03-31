@@ -11,13 +11,14 @@
     <aside id="aside">
         <?php
         session_start();
-        if(isset($_SESSION['usr_level'])){
-            if($_SESSION['usr_level'] == "M"){
+        if (isset($_SESSION['usr_level'])) {
+            if ($_SESSION['usr_level'] == "M") {
                 include "components/menu_admin.php";
-            }else{
+                include "php/func.php";
+            } else {
                 header("location: /narisaclinic/login.php");
             }
-        }else{
+        } else {
             header("location: /narisaclinic/login.php");
         }
         ?>
@@ -25,22 +26,31 @@
     <!-- HEADER -->
     <?php include "components/header.php" ?>
     <!-- /HEADER -->
-    <section id="middle"  style="margin-left: 0px;">
+    <section id="middle" style="margin-left: 0px;">
         <!-- /page title -->
         <div id="content" class="padding-20">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-heading panel-heading-transparent">
-                            <strong>รายงานการชำระ credit</strong>
+                            <strong>รายงานการชำระ credit <?php
+                                if (isset($_GET['date'])) {
+                                    echo "ประจำวันที่ " . $_GET['date'];
+//                                $op2 = new func2();
+//                                $data2 = $op2->date($_GET['date']);
+//                                echo $data2;
+                                }
+                                ?></strong>
 
                         </div>
                         <div class="panel-body">
-                            <form class="" action="reportCredit.php" method="get" enctype="multipart/form-data" data-success="Sent! Thank you!" data-toastr-position="top-right">
+                            <form class="" action="reportCredit.php" method="get" enctype="multipart/form-data"
+                                  data-success="Sent! Thank you!" data-toastr-position="top-right">
                                 <fieldset>
                                     <div class="row">
-                                        <div class="col-md-3 col-sm-3">
-                                            <input type="date" placeholder="วันที่ค้นหา" name="date" value="" class="form-control">
+                                        <div class="col-md-2 col-sm-2">
+                                            <input id="inputdatepicker" class="datepicker form-control" name="date"
+                                                   data-date-format="dd-mm-yyyy">
                                         </div>
                                         <div class="col-md-2 col-sm-2">
                                             <button type="submit" class="btn btn-3d btn-teal btn-ms btn-block">
@@ -50,8 +60,27 @@
                                     </div>
                                 </fieldset>
                             </form>
-                            <div class="table-responsive">
-                                <table class="table table-bordered nomargin">
+                            <?php
+                            $result_row = 1;
+                            if (isset($_GET['date']) && $_GET['date'] != "") {
+                                include "php/connect.php";
+                                $op = new func();
+                                $op2 = new func2();
+                                $data2 = $op2->date($_GET['date']);
+                                $date = "" . $data2 . "%";
+                                $sql = "SELECT * FROM bills WHERE bills_datetime LIKE :datecheck AND bills_ptype = 'CD'";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->execute(array(':datecheck' => $date));
+                                if ($stmt->rowCount() == 0) {
+                                    ?>
+                                    <h3 style="color: #bf6464;" class="text-center">"ไม่พบข้อมูล"</h3>
+                                    <?php
+
+                                } else {
+
+                                    ?>
+                                    <div class="table-responsive">
+                                    <table class="table table-bordered nomargin">
                                     <thead>
                                     <tr>
                                         <th>ลำดับ</th>
@@ -64,29 +93,21 @@
                                         <th width="12%"></th>
                                     </tr>
                                     </thead>
+
+                                    <tbody>
                                     <?php
-                                    $result_row = 1;
-                                        if(isset($_GET['date']) && $_GET['date'] != ""){
-                                            include "php/connect.php";
-                                            include "php/func.php";
-                                            $op = new func();
-                                            $date = "".$_GET["date"]."%";
-                                            $sql = "SELECT * FROM bills WHERE bills_datetime LIKE :datecheck AND bills_ptype = 'CD'";
-                                            $stmt = $conn->prepare($sql);
-                                            $stmt->execute(array(':datecheck'=>$date));
-                                            $i = 1;
-                                            while($result = $stmt->fetch( PDO::FETCH_ASSOC )){
-                                    ?>
-                                            <tbody>
+                                    $i = 1;
+                                    while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                        ?>
                                         <tr>
-                                            <td><?=$i?></td>
+                                            <td><?= $i ?></td>
                                             <td><?php
 
                                                 $sql_opd = "SELECT * FROM customer WHERE cus_opd = :opd";
                                                 $stmt_opd = $conn->prepare($sql_opd);
-                                                $stmt_opd->execute(array(':opd'=>$result['cus_opd']));
-                                                while($result_opd = $stmt_opd->fetch( PDO::FETCH_ASSOC )){
-                                                    echo $result_opd['cus_name']." ".$result_opd['cus_sname'];
+                                                $stmt_opd->execute(array(':opd' => $result['cus_opd']));
+                                                while ($result_opd = $stmt_opd->fetch(PDO::FETCH_ASSOC)) {
+                                                    echo $result_opd['cus_name'] . " " . $result_opd['cus_sname'];
                                                 }
                                                 ?>
                                                 <div class="margin-left-10">
@@ -95,15 +116,15 @@
 
                                                     $sql_bk = "SELECT * FROM bank WHERE bak_status = :status ORDER BY bak_no ASC";
                                                     $stmt_bk = $conn->prepare($sql_bk);
-                                                    $stmt_bk->execute(array(':status'=>"E"));
-                                                    while($result_bk = $stmt_bk->fetch( PDO::FETCH_ASSOC )){
-                                                        echo "<p class=\"nomargin\">".$result_bk['bak_id']." ";
-                                                        $st = " bills_".strtolower($result_bk['bak_id']);
-                                                        $sql_sbk = "SELECT SUM(".$st.") FROM bills WHERE bills_datetime LIKE :datecheck AND bills_ptype = 'CD' AND bills_no = :no";
+                                                    $stmt_bk->execute(array(':status' => "E"));
+                                                    while ($result_bk = $stmt_bk->fetch(PDO::FETCH_ASSOC)) {
+                                                        echo "<p class=\"nomargin\">" . $result_bk['bak_id'] . " ";
+                                                        $st = " bills_" . strtolower($result_bk['bak_id']);
+                                                        $sql_sbk = "SELECT SUM(" . $st . ") FROM bills WHERE bills_datetime LIKE :datecheck AND bills_ptype = 'CD' AND bills_no = :no";
                                                         $stmt_sbk = $conn->prepare($sql_sbk);
-                                                        $stmt_sbk->execute(array(':datecheck'=>$date,':no'=>$result['bills_no']));
-                                                        while($result_sbk = $stmt_sbk->fetch( PDO::FETCH_ASSOC )){
-                                                            echo $result_sbk['SUM('.$st.')']."</p>";
+                                                        $stmt_sbk->execute(array(':datecheck' => $date, ':no' => $result['bills_no']));
+                                                        while ($result_sbk = $stmt_sbk->fetch(PDO::FETCH_ASSOC)) {
+                                                            echo $result_sbk['SUM(' . $st . ')'] . "</p>";
                                                         }
                                                     }
                                                     ?>
@@ -113,66 +134,68 @@
                                                 $data = $op->date($result['bills_datetime']);
                                                 echo $data;
                                                 ?></td>
-                                            <td><?=$result['bills_pay']?></td>
-                                            <td><?=$result['bills_discount']?></td>
-                                            <td><?=$result['bills_net']?></td>
-                                            <td><?=$result['bills_ost']?></td>
+                                            <td><?= $result['bills_pay'] ?></td>
+                                            <td><?= $result['bills_discount'] ?></td>
+                                            <td><?= $result['bills_net'] ?></td>
+                                            <td><?= $result['bills_ost'] ?></td>
                                             <td><?php
-                                                if($result['bills_status'] == "D"){
+                                                if ($result['bills_status'] == "D") {
                                                     echo "<span style='color: #bf6464;'>รายการที่ถูกยกเลิก</span>";
-                                                }else{
-                                                    echo "<button type=\"button\" class=\"btn btn-danger btn-sm get_id\" data='".$result['bills_id']."' data-toggle=\"modal\" data-target=\"#exampleModal\">
+                                                } else {
+                                                    echo "<button type=\"button\" class=\"btn btn-danger btn-sm get_id\" data='" . $result['bills_id'] . "' data-toggle=\"modal\" data-target=\"#exampleModal\">
                             <i class=\"glyphicon glyphicon-trash\"></i>ยกเลิกรายการ
                         </button>";
                                                 }
                                                 ?></td>
                                         </tr>
                                         <?php
-                                                $result_row++;
-                                            $i++;
-                                        }
-                                        ?>
-                                        <tr>
-                                            <td class="text-center"><b>รวม</b></td>
-                                            <td colspan="7">
-                                                <?php
-
-                                                $sql_bk = "SELECT * FROM bank WHERE bak_status = :status ORDER BY bak_no ASC";
-                                                $stmt_bk = $conn->prepare($sql_bk);
-                                                $stmt_bk->execute(array(':status'=>"E"));
-                                                while($result_bk = $stmt_bk->fetch( PDO::FETCH_ASSOC )){
-                                                    echo "<p class=\"nomargin\">".$result_bk['bak_id']." ";
-                                                    $st = " bills_".strtolower($result_bk['bak_id']);
-                                                    $sql_sbk = "SELECT SUM(".$st.") FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'CD'";
-                                                    $stmt_sbk = $conn->prepare($sql_sbk);
-                                                    $stmt_sbk->execute(array(':datecheck'=>$date));
-                                                    while($result_sbk = $stmt_sbk->fetch( PDO::FETCH_ASSOC )){
-                                                        echo $result_sbk['SUM('.$st.')']."</p>";
-                                                    }
-                                                }
-                                                ?>
-                                            </td>
-                                        </tr>
-
-                                    </tbody>
-                                    <?php
-                                        }
-                                    ?>
-                                </table>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-2 col-sm-2 pull-right margin-top-20">
-                                    <?php
-                                    if(isset($_GET['date']) && $_GET['date'] != "" && $result_row != 1) {
-                                        ?>
-                                        <a href="php/pdf/credit.php?date=<?=$_GET['date']?>" class="btn btn-3d btn-teal btn-ms btn-block" id="print">
-                                            <i class="fa fa-download"></i>ปริ้น
-                                        </a>
-                                        <?php
+                                        $result_row++;
+                                        $i++;
                                     }
-                                    ?>
+                                        ?>
+                                <tr>
+                                    <td class="text-center"><b>รวม</b></td>
+                                    <td colspan="7">
+                                        <?php
+
+                                        $sql_bk = "SELECT * FROM bank WHERE bak_status = :status ORDER BY bak_no ASC";
+                                        $stmt_bk = $conn->prepare($sql_bk);
+                                        $stmt_bk->execute(array(':status' => "E"));
+                                        while ($result_bk = $stmt_bk->fetch(PDO::FETCH_ASSOC)) {
+                                            echo "<p class=\"nomargin\">" . $result_bk['bak_id'] . " ";
+                                            $st = " bills_" . strtolower($result_bk['bak_id']);
+                                            $sql_sbk = "SELECT SUM(" . $st . ") FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'CD'";
+                                            $stmt_sbk = $conn->prepare($sql_sbk);
+                                            $stmt_sbk->execute(array(':datecheck' => $date));
+                                            while ($result_sbk = $stmt_sbk->fetch(PDO::FETCH_ASSOC)) {
+                                                echo $result_sbk['SUM(' . $st . ')'] . "</p>";
+                                            }
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                                </table>
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <div class="col-md-2 col-sm-2 pull-right margin-top-20">
+                                        <?php
+                                        if (isset($_GET['date']) && $_GET['date'] != "" && $result_row != 1) {
+                                            ?>
+                                            <a href="php/pdf/credit.php?date=<?= $_GET['date'] ?>"
+                                               class="btn btn-3d btn-teal btn-ms btn-block" id="print">
+                                                <i class="fa fa-download"></i>ปริ้น
+                                            </a>
+                                            <?php
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                                <?php
+                            }
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -184,14 +207,15 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">กรุณาใส่ PassCode</h4>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="passcode" name="passcode" class="form-control" placeholder="รหัส PassCode">
                     <input type="hidden" id="bills_id" value="">
                     <input type="hidden" id="location" value="reportCredit">
-                    <input type="hidden" id="date" value="<?=$_GET['date']?>">
+                    <input type="hidden" id="date" value="<?= $_GET['date'] ?>">
                     <div id="passcode-text" style="color: red" class="hide">
                         รหัส Passcode ไม่ถูกต้อง
                     </div>
@@ -206,6 +230,19 @@
 
 </div>
 <?php include "components/template_js.php"; ?>
+<script src="assets/template/plugins/jquery/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="assets/js/narisa-01.js"></script>
+<script src="dist/js/bootstrap-datepicker-custom.js"></script>
+<script src="dist/locales/bootstrap-datepicker.th.min.js" charset="UTF-8"></script>
+<script>
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            todayBtn: true,
+            language: 'th',             //เปลี่ยน label ต่างของ ปฏิทิน ให้เป็น ภาษาไทย   (ต้องใช้ไฟล์ bootstrap-datepicker.th.min.js นี้ด้วย)
+            thaiyear: true              //Set เป็นปี พ.ศ.
+        }).datepicker("setDate", "0");  //กำหนดเป็นวันปัจุบัน
+    });
+</script>
 </body>
 </html>

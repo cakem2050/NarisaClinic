@@ -10,10 +10,9 @@
 include "../connect.php";
 include  "../../vendor/autoload.php";
 include "../func.php";
-$op = new func();
-$date = $_GET['date'];
-echo $date;
-$report_date = $op->date($date);
+$op2 = new func2();
+$date = $op2->date($_GET['date'])."%";
+$report_date = $_GET['date'];
 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
 $content = "<style>
 .container,th,td,h1{
@@ -44,6 +43,7 @@ table {
     color: #bf6464;
 }
 </style>
+<h1 class='sum' style='font-size: 20px;'>Narisa Clinic</h1>
 <h1>รายงานการชำระ CREDIT ".$report_date."</h1>
 <div class='container'>
     <table>
@@ -64,7 +64,6 @@ table {
 include "php/connect.php";
 include "php/func.php";
 $op = new func();
-$date = "".$_GET["date"]."%";
 $sql = "SELECT * FROM bills WHERE bills_datetime LIKE :datecheck AND bills_ptype = 'CD'";
 $stmt = $conn->prepare($sql);
 $stmt->execute(array(':datecheck'=>$date));
@@ -87,7 +86,7 @@ while($result = $stmt->fetch( PDO::FETCH_ASSOC )){
         while($result_bk = $stmt_bk->fetch( PDO::FETCH_ASSOC )){
             $content = $content."<p class='nomargin'>".$result_bk['bak_id']." ";
             $st = " bills_".strtolower($result_bk['bak_id']);
-            $sql_sbk = "SELECT SUM(".$st.") FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'CD' AND bills_no = :no";
+            $sql_sbk = "SELECT SUM(".$st.") FROM bills WHERE bills_datetime LIKE :datecheck AND bills_ptype = 'CD' AND bills_no = :no";
             $stmt_sbk = $conn->prepare($sql_sbk);
             $stmt_sbk->execute(array(':datecheck'=>$date,':no'=>$result['bills_no']));
             while($result_sbk = $stmt_sbk->fetch( PDO::FETCH_ASSOC )){
@@ -96,9 +95,10 @@ while($result = $stmt->fetch( PDO::FETCH_ASSOC )){
         }
         $content = $content."</div></td>";
     }
-    $data = $op->date($result['bills_datetime']);
+    $op1 = new func();
+    $data2 = $op1->date($result['bills_datetime']);
     $content = $content."
-            <td>".$data."</td>
+            <td>".$data2."</td>
             <td>".$result['bills_pay']."</td>
             <td>".$result['bills_discount']."</td>
             <td>".$result['bills_net']."</td>
