@@ -15,7 +15,8 @@
     $add = $_POST["add"];
     $tel = $_POST["tel"];
     $detail = $_POST["detail"];
-    $cdate = date("Y-m-d H:i:s");
+    $year = date("Y")+543;
+    $cdate = date($year."-m-d H:i:s");
     //echo $opd." ".$name." ".$sname." ".$add." ".$tel." ".$detail;
     //header("Location: http://www.example.com/");
     //exit;
