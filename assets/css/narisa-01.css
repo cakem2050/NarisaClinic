@@ -86,6 +86,9 @@ h3{
     text-align: center;
 }
 /* ========= billist =========*/
+#content-pay input{
+    text-align: right;
+}
 .bill-th{
     background-color: rgba(0, 0, 0, 0.06) !important;
 }

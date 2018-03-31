@@ -59,10 +59,10 @@ if (!isset($_GET['opd'])) {
                             <!-- SmartWizard html -->
                             <div id="smartwizard" class="sw-main sw-theme-arrows">
                                 <ul class="nav nav-tabs step-anchor na-edit-nav">
-                                    <li class="nav-item active"><a href="#step-1" class="edit-active">Step 1<br/>
+                                    <li class="nav-item active"><a href="#step-1" class="edit-active">ขั้นตอนที่ 1<br/>
                                             <small>ทำรายการซื้อสินค้า</small>
                                         </a></li>
-                                    <li class="nav-item"><a href="#step-2" class="edit-active">Step 2<br/>
+                                    <li class="nav-item"><a href="#step-2" class="edit-active">ขั้นตอนที่ 2<br/>
                                             <small>วิธีชำระเงิน</small>
                                         </a></li>
                                     <li class="pull-right content-user">
@@ -157,9 +157,9 @@ if (!isset($_GET['opd'])) {
                                         <div class="row">
                                             <div class="btn-group" data-toggle="buttons">
                                                 <div class="col-md-4">
-                                                    <label class="btn btn-default active">
+                                                    <label class="btn btn-default">
                                                         <input type="radio" name="option" class="select1" value="TC"
-                                                               autocomplete="off" style="" checked>โอนเงินใน Clinic
+                                                               autocomplete="off" style="">โอนเงินใน Clinic
                                                     </label>
                                                 </div>
                                                 <div class="col-md-4">
@@ -175,9 +175,9 @@ if (!isset($_GET['opd'])) {
                                                     </label>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label class="btn btn-default">
+                                                    <label class="btn btn-default active">
                                                         <input type="radio" name="option" class="select1" value="CH"
-                                                               autocomplete="off" style="">เงินสด
+                                                               autocomplete="off" style="" checked>เงินสด
                                                     </label>
                                                 </div>
                                                 <div class="col-md-4">
