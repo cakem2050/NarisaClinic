@@ -119,7 +119,6 @@ if (!isset($_GET['opd'])) {
                                                                 <div class="input-group">
                                                                     <input type="number" class="form-control"
                                                                            placeholder="ราคา" name="add-pro-price" disabled>
-                                                                    <div class="input-group-addon">/ชิ้น</div>
                                                                 </div>
                                                             </td>
                                                             <td>
