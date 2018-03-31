@@ -143,7 +143,6 @@ $(document).ready(function () {
                 $("#tempInput").prepend(data);
                 $("#name").text($("#pro_name-sub").val());
                 $("#price input").val($("#pro_price-sub").val()).attr('disabled', false);
-                $("#price .input-group-addon").text($("#pro_unit-sub").val());
                 $("#amount").attr('disabled', false);
                 $("#discount-pre").attr('disabled', false);
                 $("#discount").attr('disabled', false);

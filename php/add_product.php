@@ -58,7 +58,7 @@ if (isset($_POST['action'])) {
                     <td name='pro_name'>".$items['pro_name']."</td>
                     <td name='td-price'><div class=\"input-group\">
                     <input class='form-control price' type='number' name='price' value='" . $items['bild_price'] . "'>
-                    <div class=\"input-group-addon\">/" . $items['pro_unit'] . "</div></div></td>
+                    </div></td>
                     <td name='td-amount'><input type=\"number\" name='i-amount' class=\"form-control\" value='".$items['bild_value']."' ></td>
                     <td name='td-discount-pre'><input type=\"number\" name='i-discount-pre' class=\"form-control\" value='".$discount_pre."' ></td>
                     <td name='td-discount'><input type=\"number\" name='i-discount' class=\"form-control\" value='".$discount."' ></td>
