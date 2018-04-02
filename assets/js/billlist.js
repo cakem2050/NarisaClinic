@@ -1,4 +1,16 @@
+
+var barcode = "";
+
 $(document).ready(function () {
+
+    $('#bill-detail').on('keyup keypress', function(e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+            // e.preventDefault();
+            // return false;
+        }
+    });
+
     $("#stale-money").change(function () {
         var price_stale = $(this).val();
         var sum = 0;
@@ -24,10 +36,13 @@ $(document).ready(function () {
         }
     });
 
-    var barcode = "";
+    barcode = "";
+
     $(document).keydown(function (e) {
         var code = (e.keyCode ? e.keyCode : e.which);
         if (code === 13) {
+            e.preventDefault();
+            $("input[name='i-amount']").blur();
             $.ajax({
                 url: "php/add_product_barcode.php",
                 type: "POST",
@@ -53,16 +68,20 @@ $(document).ready(function () {
                     $.each(no_id,function (key,value) {
                         $(this).children().first().text(count);
                         count++;
-                    })
+                    });
                 }
             });
+            var barcode_input = barcode;
+            setTimeout(function() {
+                var el = $("#tbody").find("input[value='"+barcode_input+"']").parent().parent().find("input[name='i-amount']");
+                el.focus();
+            }, 100);
             barcode = "";
-        }
-        else if (code === 9) {
-            alert("kwan");
+            return false;
         } else {
             barcode = barcode + String.fromCharCode(code);
         }
+        console.log(barcode);
     });
 
     $.fn.digits = function () {
@@ -149,6 +168,8 @@ $(document).ready(function () {
                 $("#pro-id").val($("#id-sub").val());
                 $("#pro-price").val($("#pro_price-sub").val());
             });
+        setTimeout(function() { $("#amount").focus() }, 100);
+
     });
     $("#search").select2({
         id: function (bond) {
@@ -493,3 +514,10 @@ $(document).delegate("#confirm_delete", "click", function () {
 
 });
 
+$(document).delegate("input[name='i-amount']","keyup keypress",function (e) {
+    var keyCode = e.keyCode || e.which;
+    if (keyCode === 13) {
+        $("input[name='i-amount']").blur();
+        barcode = "";
+    }
+});

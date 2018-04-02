@@ -23,7 +23,7 @@ if (isset($_POST['barcode'])) {
                     <td name='td-price'><div class=\"input-group\">
                     <input class='form-control price' type='number' name='price' value='" . $row['pro_price'] . "'>
                     </div></td>
-                    <td name='td-amount'><input name='i-amount' type=\"number\" class=\"form-control\" value='1' ></td>
+                    <td name='td-amount'><input name='i-amount' type=\"number\" class=\"form-control\" value='' ></td>
                     <td name='td-discount-pre'><input type=\"number\" name='i-discount-pre' class=\"form-control\"></td>
                     <td name='td-discount'><input type=\"number\" name='i-discount' class=\"form-control\" ></td>
                     <td name='td-allprice'><span name='allprice'>" . $row['pro_price'] . "</span></td>
