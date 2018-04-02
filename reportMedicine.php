@@ -71,7 +71,26 @@
                                 $sql_pro = "SELECT * FROM product WHERE pro_status ='E'";
                                 $stmt_pro = $conn->prepare($sql_pro);
                                 $stmt_pro->execute(array(':datecheck' => $date));
-                                if ($stmt_pro->rowCount() == 0) {
+
+                                $pro_id = [];
+                                $pro_name = [];
+                                $sum_pro = [];
+                                $sum_check = 0;
+                                while ($result = $stmt_pro->fetch(PDO::FETCH_ASSOC)) {
+                                    $pro_id[] = $result['pro_id'];
+                                    $pro_name[] = $result['pro_name'];
+                                    $sql_prc = "SELECT SUM(bild_value) FROM billsdetail WHERE bild_timestamp LIKE :datecheck AND bild_status = 'E' AND pro_id = :pro_id";
+                                    $stmt_prc = $conn->prepare($sql_prc);
+                                    $stmt_prc->execute(array(':datecheck' => $date, 'pro_id' => $result['pro_id']));
+
+                                    while ($result_prc = $stmt_prc->fetch(PDO::FETCH_ASSOC)) {
+                                        $sum_check = $sum_check + $result_prc['SUM(bild_value)'];
+                                        $sum_pro[] = $result_prc['SUM(bild_value)'];
+                                        //echo "<td>" . $result_prc['SUM(bild_value)']."</td>";
+                                    }
+                                }
+
+                                if ($sum_check == 0) {
                                     ?>
                                     <h3 style="color: #bf6464;" class="text-center">"ไม่พบข้อมูล"</h3>
                                     <?php
@@ -92,25 +111,13 @@
 
                                             <tbody>
                                             <?php
-                                            $i = 1;
-                                            while ($result = $stmt_pro->fetch(PDO::FETCH_ASSOC)) {
-                                                ?>
-                                                <tr>
-                                                    <td><?= $i ?></td>
-                                                    <td><?= $result['pro_id'] ?></td>
-                                                    <td><?= $result['pro_name'] ?></td>
-                                                    <?php
-                                                    $sql_prc = "SELECT SUM(bild_value) FROM billsdetail WHERE bild_timestamp LIKE :datecheck AND bild_status = 'E' AND pro_id = :pro_id";
-                                                    $stmt_prc = $conn->prepare($sql_prc);
-                                                    $stmt_prc->execute(array(':datecheck' => $date, 'pro_id' => $result['pro_id']));
-                                                    while ($result_prc = $stmt_prc->fetch(PDO::FETCH_ASSOC)) {
-                                                        echo "<td>" . $result_prc['SUM(bild_value)']."</td>";
-                                                    }
-                                                    ?>
-                                                </tr>
-                                                <?php
-                                                $result_row++;
-                                                $i++;
+                                            $j = 1;
+
+                                            foreach ($sum_pro as $key => $item) {
+                                                if ($item != 0) {
+                                                    echo "<tr><td>" . $j . "</td><td>" . $pro_id[$key] . "</td><td>" . $pro_name[$key] . "</td><td>" . $item . "</td></tr>";
+                                                    $j++;
+                                                }
                                             }
                                             ?>
                                             </tbody>
@@ -120,7 +127,7 @@
                                     <div class="row">
                                         <div class="col-md-2 col-sm-2 pull-right margin-top-20">
                                             <?php
-                                            if (isset($_GET['date']) && $_GET['date'] != "" && $result_row != 1) {
+                                            if (isset($_GET['date']) && $_GET['date'] != "" && $sum_check != 0) {
                                                 ?>
                                                 <a href="php/pdf/medicine.php?date=<?= $_GET['date'] ?>"
                                                    class="btn btn-3d btn-teal btn-ms btn-block" id="print">

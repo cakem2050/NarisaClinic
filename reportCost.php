@@ -80,10 +80,67 @@
                                 $pay_tl = $conn->prepare($sql_tl);
                                 $pay_tl->execute(array(':datecheck' => $date));
 
-                                $sql_ch = "SELECT SUM(bills_cash) FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E' AND bills_ptype = 'CH'";
+                                $sql_ch = "SELECT SUM(bills_cash) FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E'";
                                 $pay_ch = $conn->prepare($sql_ch);
                                 $pay_ch->execute(array(':datecheck' => $date));
-                                if ($pay_tc->rowCount() == 0 && $pay_to->rowCount() == 0 && $pay_tl->rowCount() == 0 && $pay_ch->rowCount() == 0) {
+
+                                $result_tc_cop = "";
+                                while ($result_tc = $pay_tc->fetch(PDO::FETCH_ASSOC)) {
+                                    $result_tc_cop = $result_tc['SUM(bills_net)'];
+                                    //echo $result_tc['SUM(bills_net)'];
+                                }
+
+                                $result_ch_cop = "";
+                                while ($result_ch = $pay_ch->fetch(PDO::FETCH_ASSOC)) {
+                                    $result_ch_cop = $result_ch['SUM(bills_cash)'];
+                                    //echo $result_ch['SUM(bills_cash)'];
+                                }
+
+                                $result_to_cop = "";
+                                while ($result_to = $pay_to->fetch(PDO::FETCH_ASSOC)) {
+                                    $result_to_cop = $result_to['SUM(bills_net)'];
+                                    //echo $result_to['SUM(bills_net)'];
+                                }
+
+                                $result_tl_cop = "";
+                                while ($result_tl = $pay_tl->fetch(PDO::FETCH_ASSOC)) {
+                                    $result_tl_cop = $result_tl['SUM(bills_net)'];
+                                    //echo $result_tl['SUM(bills_net)'];
+                                }
+
+                                $sql_bk = "SELECT * FROM bank WHERE bak_status = :status ORDER BY bak_no ASC";
+                                $stmt_bk = $conn->prepare($sql_bk);
+                                $stmt_bk->execute(array(':status' => "E"));
+                                $sum_credit = 0;
+                                $test = [];
+                                $test2 = [];
+                                while ($result_bk = $stmt_bk->fetch(PDO::FETCH_ASSOC)) {
+                                    $test[] =$result_bk['bak_id'];
+                                    //echo "<span class=\"margin-left-10\">+ " . $result_bk['bak_id'] . "</span>";
+                                    $st = " bills_" . strtolower($result_bk['bak_id']);
+                                    $sql_sbk = "SELECT SUM(" . $st . ") FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E'";
+                                    $stmt_sbk = $conn->prepare($sql_sbk);
+                                    $stmt_sbk->execute(array(':datecheck' => $date));
+                                    while ($result_sbk = $stmt_sbk->fetch(PDO::FETCH_ASSOC)) {
+                                        $test2[] = $result_sbk['SUM(' . $st . ')'];
+                                        $sum_credit = $sum_credit + $result_sbk['SUM(' . $st . ')'];
+                                        //echo "<span class=\"pull-right margin-right-20\">" . $result_sbk['SUM(' . $st . ')'] . "</span><br>";
+                                    }
+                                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                if ($result_tc_cop == 0 && $result_ch_cop == 0 && $result_to_cop == 0 && $result_to_cop == 0 && $sum_credit == 0) {
                                     ?>
                                     <h3 style="color: #bf6464;" class="text-center">"ไม่พบข้อมูล"</h3>
                                     <?php
@@ -98,20 +155,12 @@
                                                 <td width="33%">เงินโอนที่ clinic<span
                                                             class="pull-right margin-right-20">
                                             <?php
-                                            $result_tc_cop = "";
-                                            while ($result_tc = $pay_tc->fetch(PDO::FETCH_ASSOC)) {
-                                                $result_tc_cop = $result_tc['SUM(bills_net)'];
-                                                echo $result_tc['SUM(bills_net)'];
-                                            }
+                                                echo $result_tc_cop;
                                             ?>
                                             </span></td>
                                                 <td width="33%">เงินสด <span class="pull-right margin-right-20">
                                             <?php
-                                            $result_ch_cop = "";
-                                            while ($result_ch = $pay_ch->fetch(PDO::FETCH_ASSOC)) {
-                                                $result_ch_cop = $result_ch['SUM(bills_cash)'];
-                                                echo $result_ch['SUM(bills_cash)'];
-                                            }
+                                                echo $result_ch_cop;
                                             ?>
                                             </span></td>
                                                 <td>credit</td>
@@ -119,30 +168,14 @@
                                             <tr>
                                                 <td>เงินโอนที่นอก clinic <span class="pull-right margin-right-20">
                                             <?php
-                                            $result_to_cop = "";
-                                            while ($result_to = $pay_to->fetch(PDO::FETCH_ASSOC)) {
-                                                $result_to_cop = $result_to['SUM(bills_net)'];
-                                                echo $result_to['SUM(bills_net)'];
-                                            }
+                                                echo $result_to_cop;
                                             ?>
                                             </span></td>
                                                 <td></td>
                                                 <td rowspan="2">
                                                     <?php
-                                                    $sql_bk = "SELECT * FROM bank WHERE bak_status = :status ORDER BY bak_no ASC";
-                                                    $stmt_bk = $conn->prepare($sql_bk);
-                                                    $stmt_bk->execute(array(':status' => "E"));
-                                                    $sum_credit = 0;
-                                                    while ($result_bk = $stmt_bk->fetch(PDO::FETCH_ASSOC)) {
-                                                        echo "<span class=\"margin-left-10\">+ " . $result_bk['bak_id'] . "</span>";
-                                                        $st = " bills_" . strtolower($result_bk['bak_id']);
-                                                        $sql_sbk = "SELECT SUM(" . $st . ") FROM bills WHERE bills_datetime LIKE :datecheck AND bills_status = 'E'";
-                                                        $stmt_sbk = $conn->prepare($sql_sbk);
-                                                        $stmt_sbk->execute(array(':datecheck' => $date));
-                                                        while ($result_sbk = $stmt_sbk->fetch(PDO::FETCH_ASSOC)) {
-                                                            $sum_credit = $sum_credit + $result_sbk['SUM(' . $st . ')'];
-                                                            echo "<span class=\"pull-right margin-right-20\">" . $result_sbk['SUM(' . $st . ')'] . "</span><br>";
-                                                        }
+                                                    foreach ($test as $key => $item){
+                                                        echo "<span class=\"margin-left-10\">+ " . $item . "</span><span class=\"pull-right margin-right-20\">" . $test2[$key] . "</span><br>";
                                                     }
                                                     ?>
 
@@ -151,11 +184,7 @@
                                             <tr>
                                                 <td>เงินโอน Line@ <span class="pull-right margin-right-20">
                                             <?php
-                                            $result_tl_cop = "";
-                                            while ($result_tl = $pay_tl->fetch(PDO::FETCH_ASSOC)) {
-                                                $result_tl_cop = $result_tl['SUM(bills_net)'];
-                                                echo $result_tl['SUM(bills_net)'];
-                                            }
+                                                echo $result_to_cop;
                                             ?>
                                             </span></td>
                                                 <td></td>

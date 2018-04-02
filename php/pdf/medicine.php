@@ -15,6 +15,32 @@ $date = $op3->date($_GET['date'])."%";
 echo $date;
 $report_date = $_GET['date'];
 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => 'A4-L']);
+
+
+
+$sql_pro = "SELECT * FROM product WHERE pro_status ='E'";
+$stmt_pro = $conn->prepare($sql_pro);
+$stmt_pro->execute(array(':datecheck' => $date));
+
+$pro_id = [];
+$pro_name = [];
+$sum_pro = [];
+$sum_check = 0;
+while ($result = $stmt_pro->fetch(PDO::FETCH_ASSOC)) {
+    $pro_id[] = $result['pro_id'];
+    $pro_name[] = $result['pro_name'];
+    $sql_prc = "SELECT SUM(bild_value) FROM billsdetail WHERE bild_timestamp LIKE :datecheck AND bild_status = 'E' AND pro_id = :pro_id";
+    $stmt_prc = $conn->prepare($sql_prc);
+    $stmt_prc->execute(array(':datecheck' => $date, 'pro_id' => $result['pro_id']));
+
+    while ($result_prc = $stmt_prc->fetch(PDO::FETCH_ASSOC)) {
+        $sum_check = $sum_check + $result_prc['SUM(bild_value)'];
+        $sum_pro[] = $result_prc['SUM(bild_value)'];
+        //echo "<td>" . $result_prc['SUM(bild_value)']."</td>";
+    }
+}
+
+
 $content = "<style>
 .container,th,td,h1{
     font-family: 'Garuda';
@@ -50,27 +76,15 @@ table {
         </thead>
         <tbody>
     ";
-$sql_pro = "SELECT * FROM product WHERE pro_status ='E'";
-$stmt_pro = $conn->prepare($sql_pro);
-$stmt_pro->execute(array(':datecheck' => $date));
-$i = 1;
-while($result = $stmt_pro->fetch( PDO::FETCH_ASSOC )) {
+$j = 1;
 
-    $content = $content . "
-        <tr>
-            <td>" . $i . "</td>
-            <td>" . $result['pro_id'] . "</td>
-            <td>" . $result['pro_name'] . "</td>
-    ";
-    $sql_prc = "SELECT SUM(bild_value) FROM billsdetail WHERE bild_timestamp LIKE :datecheck AND bild_status = 'E' AND pro_id = :pro_id";
-    $stmt_prc = $conn->prepare($sql_prc);
-    $stmt_prc->execute(array(':datecheck' => $date, 'pro_id' => $result['pro_id']));
-    while ($result_prc = $stmt_prc->fetch(PDO::FETCH_ASSOC)) {
-        $content = $content ."<td>" . $result_prc['SUM(bild_value)'] . "</td>";
+foreach ($sum_pro as $key => $item) {
+    if ($item != 0) {
+        $content = $content."<tr><td>" . $j . "</td><td>" . $pro_id[$key] . "</td><td>" . $pro_name[$key] . "</td><td>" . $item . "</td></tr>";
+        $j++;
     }
 }
 $content = $content."
-            </tr>
         </tbody>
     </table>
 </div>";
