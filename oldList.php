@@ -1,7 +1,7 @@
 <?php
-include "php/connect.php";
-$sql = "SELECT * FROM customer ORDER BY cus_cdate DESC LIMIT 20";
-$result = $conn->query($sql);
+    include "php/connect.php";
+    $sql = "SELECT * FROM customer ORDER BY cus_cdate DESC LIMIT 20";
+    $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,13 +17,13 @@ $result = $conn->query($sql);
     <aside id="aside">
         <?php
         session_start();
-        if (isset($_SESSION['usr_level'])) {
-            if ($_SESSION['usr_level'] == "C") {
+        if(isset($_SESSION['usr_level'])){
+            if($_SESSION['usr_level'] == "C"){
                 include "components/menu_staff.php";
-            } else {
+            }else{
                 header("location: /narisaclinic/login.php");
             }
-        } else {
+        }else{
             header("location: /narisaclinic/login.php");
         }
         ?>
@@ -48,8 +48,7 @@ $result = $conn->query($sql);
                             </div>
                             <div class="form-group col-md-4">
                                 <label>ค้นหาเบอร์โทร</label>
-                                <input type="text" class="form-control masked" data-format="9999999999"
-                                       data-placeholder="X" placeholder="เบอร์โทรศัพท์" name="phone">
+                                <input type="text" class="form-control masked" data-format="9999999999" data-placeholder="X" placeholder="เบอร์โทรศัพท์" name="phone" >
                             </div>
                             <div class="col-md-2 col-md-offset-5">
                                 <div id="help-box" class="err-text hide">กรุณากรอกข้อมูลอย่างน้อย 1 ช่อง</div>
@@ -90,23 +89,25 @@ $result = $conn->query($sql);
                                 <th class="col-md-4">ชื่อคนไข้</th>
                                 <th class="col-md-3">เลข OPD</th>
                                 <th class="col-md-4">เบอร์โทรศัพท์</th>
+                                <th></th>
+
                             </tr>
                             </thead>
                             <tbody id="customer">
                             <?php
                             $count = 1;
-                            while ($row = $result->fetch()) {
-                                ?>
-                                <tr class="na-tr-select">
-                                    <td onclick="window.location.href='billList.php?opd=<?= $row['cus_opd'] ?>'"><?= $count ?></td>
-                                    <td onclick="window.location.href='billList.php?opd=<?= $row['cus_opd'] ?>'"><?= $row['cus_name'] ?> <?= $row['cus_sname'] ?></td>
-                                    <td onclick="window.location.href='billList.php?opd=<?= $row['cus_opd'] ?>'"><?= $row['cus_opd'] ?></td>
-                                    <td onclick="window.location.href='billList.php?opd=<?= $row['cus_opd'] ?>'"><?= $row['cus_tel'] ?></td>
-                                    <td data-id="<?= $row['cus_opd'] ?>" data-toggle="modal" data-target="#ModalEdit"><a href="#"><i class="glyphicon glyphicon-edit"></i></a></td>
-                                </tr>
-                                <?php
-                                $count++;
-                            }
+                                while ($row = $result->fetch()) {
+                                    ?>
+                                    <tr class="na-tr-select" onclick="window.location.href='billList.php?opd=<?= $row['cus_opd'] ?>'">
+                                        <td><?= $count ?></td>
+                                        <td><?= $row['cus_name'] ?> <?= $row['cus_sname'] ?></td>
+                                        <td><?= $row['cus_opd'] ?></td>
+                                        <td><?= $row['cus_tel'] ?></td>
+                                        <td><i class="fa fa-edit test"></i></td>
+                                    </tr>
+                                    <?php
+                                    $count++;
+                                }
                             ?>
                             </tbody>
                         </table>
@@ -121,56 +122,15 @@ $result = $conn->query($sql);
 
                 </div>
                 <!-- /panel footer -->
-                <!-- Modal Edit -->
-                <div id="ModalEdit" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
-                     aria-labelledby="myLargeModalLabel">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <form class="" action="../narisaclinic/php/insertCustomer.php" method="post">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                                aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="myModalLabel">แก้ไขข้อมูลคนไข้</h4>
-                                </div>
-                                <div class="modal-body" id="modal-body">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
-                                    <button id="saveCustomer" type="button" class="btn btn-success">บันทึกข้อมูล</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div id="ModalEditSuccess" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
-                     aria-labelledby="myLargeModalLabel">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <form class="" action="../narisaclinic/php/insertCustomer.php" method="post">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                                aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="myModalLabel">แก้ไขข้อมูลคนไข้</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div style="text-align: center;font-size: 22px">
-                                        <i style="padding-right: 15px" class="glyphicon glyphicon-ok"></i>แก้ไขข้อมูลคนไข้สำเร็จ
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+
             </div>
-
-
         </div>
-</div>
-</section>
-<!-- /MIDDLE -->
+    </section>
+    <!-- /MIDDLE -->
 
 </div>
 <?php include "components/template_js.php"; ?>
 <script src="assets/js/oldlist.js"></script>
+<script src="assets/js/narisa-01.js"></script>
 </body>
 </html>

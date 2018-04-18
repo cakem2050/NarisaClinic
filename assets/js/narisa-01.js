@@ -127,4 +127,9 @@ $(document).ready(function() {
         $('#bills_id').val(id);
     });
 
+    $('.test').click(function (e) {
+        e.preventDefault();
+        alert("sdfsdf");
+    });
+
 });
