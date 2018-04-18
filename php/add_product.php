@@ -31,7 +31,7 @@ if (isset($_POST['action'])) {
             'bild_value' => $_POST['amount'],
             'bild_price' => $_POST['add-pro-price'],
             'bild_discount' => $discount,
-            'total'=> ($_POST['amount']*$_POST['pro-price'])-$discount,
+            'total'=> ($_POST['amount']*$_POST['add-pro-price'])-$discount,
         ];
         if (isset($_POST['discount'])) {
             $discount = $_POST['discount'];
@@ -50,8 +50,15 @@ if (isset($_POST['action'])) {
             $_SESSION['count_pro'] = 1;
             $count=1;
         }
+        $discount_status = 0;
+        if($discount != 0 || $discount != null || $discount_pre != 0 || $discount_pre != null){
+            if($discount != 0 || $discount != null){
+                $discount_status = 1;
+            }elseif ($discount_pre != 0 || $discount_pre != null){
+                $discount_status = 2;
+            }
+        }
         //($items['bild_value']*$items['bild_price'])
-        print_r($items);
         echo "<tr name='".$items['pro_id']."-".$count."'>
                     <td>".$count."</td>
                     <td><input name='pro_id' type=\"text\" class=\"form-control\" value='".$items['pro_id']."' disabled></td>
@@ -60,9 +67,9 @@ if (isset($_POST['action'])) {
                     <input class='form-control price' type='number' name='price' value='" . $items['bild_price'] . "'>
                     </div></td>
                     <td name='td-amount'><input type=\"number\" name='i-amount' class=\"form-control\" value='".$items['bild_value']."' ></td>
-                    <td name='td-discount-pre'><input type=\"number\" name='i-discount-pre' class=\"form-control\" value='".$discount_pre."' ></td>
-                    <td name='td-discount'><input type=\"number\" name='i-discount' class=\"form-control\" value='".$discount."' ></td>
-                    <td name='td-allprice'><span name='allprice'>".$items['total']."</span></td>
+                    <td name='td-discount-pre'><input type=\"number\" name='i-discount-pre' class=\"form-control\" value='".$discount_pre."'";if($discount_status==1)echo "disabled";echo"></td>
+                    <td name='td-discount'><input type=\"number\" name='i-discount' class=\"form-control\" value='".$discount."' ";if($discount_status==2)echo "disabled";echo "></td>
+                    <td name='td-allprice'><span name='allprice'>".number_format ($items['total'],2)."</span></td>
                     <td>
                         <button type='button' class=\"btn btn-danger btn-sm\" data-deletepro='".$items['pro_id']."-".$count."' name='btn-delete'>
                             <i class=\"glyphicon glyphicon-trash\"></i>ยกเลิกรายการ

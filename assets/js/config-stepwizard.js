@@ -41,6 +41,9 @@ $(document).ready(function () {
         // Navigate previous
         $('#content-pay').slideToggle();
         $('#smartwizard').smartWizard("prev");
+        $("#receive-money").addClass('hide');
+        $("#receive").val('');
+        $("#change").text('0.00');
         return true;
     });
 
@@ -53,7 +56,8 @@ $(document).ready(function () {
         var final_price = sum - price_stale;
         var body = $("#tbody").children().prop("tagName");
         if (body !== undefined) {
-            $('#select1 input').val(final_price);
+            $("#receive-money").removeClass('hide');
+            $('#select1 input').val(final_price.toFixed(2));
             $('#content-pay').slideToggle();
             $('#smartwizard').smartWizard("next");
             return true;

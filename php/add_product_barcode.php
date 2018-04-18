@@ -26,7 +26,7 @@ if (isset($_POST['barcode'])) {
                     <td name='td-amount'><input name='i-amount' type=\"number\" class=\"form-control\" value='' ></td>
                     <td name='td-discount-pre'><input type=\"number\" name='i-discount-pre' class=\"form-control\"></td>
                     <td name='td-discount'><input type=\"number\" name='i-discount' class=\"form-control\" ></td>
-                    <td name='td-allprice'><span name='allprice'>" . $row['pro_price'] . "</span></td>
+                    <td name='td-allprice'><span name='allprice'>" .number_format ($row['pro_price'],2) . "</span></td>
                     <td>
                         <button type='button' class=\"btn btn-danger btn-sm\" data-deletepro='".$row['pro_id']."-".$count."' name='btn-delete'>
                             <i class=\"glyphicon glyphicon-trash\"></i>ยกเลิกรายการ

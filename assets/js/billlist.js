@@ -3,6 +3,11 @@ var barcode = "";
 
 $(document).ready(function () {
 
+    $.fn.digits = function () {
+        return this.each(function () {
+            $(this).text($(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+        })
+    }
     $('#bill-detail').on('keyup keypress', function(e) {
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) {
@@ -17,7 +22,8 @@ $(document).ready(function () {
             sum += +$(this).text() || 0;
         });
         var final_price = sum - price_stale;
-        $("#final_price").text(final_price);
+        $("#final_price").text(final_price.toFixed(2));
+        $("#final_price").digits();
     });
     $("#select1 input[type='number']").change(function () {
         if ($(this).val() > $(this).attr('max')) {
@@ -55,11 +61,11 @@ $(document).ready(function () {
                     $('span[name="allprice"]').each(function () {
                         sum += +$(this).text() || 0;
                     });
-                    $("#result-allprice").text(sum);
+                    $("#result-allprice").text(sum.toFixed(2));
                     $("#content-pay #section1 input").val(sum);
                     $("#content-pay #section3 input").val(sum);
                     $("#result-allprice").digits();
-                    $("#final_price").text(sum);
+                    $("#final_price").text(sum.toFixed(2));
                     $("#final_price").digits();
                     //Set NO.
                     var no_id = $("#tbody").children();
@@ -83,11 +89,6 @@ $(document).ready(function () {
         console.log(barcode);
     });
 
-    $.fn.digits = function () {
-        return this.each(function () {
-            $(this).text($(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
-        })
-    }
     $("#amount").change(function () {
         $("#amount").removeClass('required-amount');
         $("#amount").addClass('pass-amount');
@@ -106,7 +107,7 @@ $(document).ready(function () {
                         sum += +$(this).text() || 0;
                     });
                     var stale_money = $("#stale-money").val();
-                    $("#result-allprice").text(sum).digits();
+                    $("#result-allprice").text(sum.toFixed(2)).digits();
                     $("#amount").val('').attr('disabled', true).removeClass('pass-amount');
                     $(".select2-selection__rendered").text('ค้นหาสินค้า');
                     $("#discount-pre").val('').attr('disabled', true);
@@ -114,7 +115,7 @@ $(document).ready(function () {
                     $("#name").text('ชื่อรายการสินค้า');
                     $("#price input").val('ราคา').attr('disabled', true);
                     $("#price .input-group-addon").text('ชิ้น');
-                    $("#final_price").text(sum - stale_money);
+                    $("#final_price").text((sum - stale_money).toFixed(2));
                     $("#final_price").digits();
                     //Set NO.
                     var no_id = $("#tbody").children();
@@ -129,6 +130,28 @@ $(document).ready(function () {
             $("#amount").addClass('required-amount');
         }
         $("#bill-detail").submit(false);
+    });
+
+    //Receive
+    $('#receive').keyup(function () {
+        setTimeout(function(){
+            var result = $("#final_price").text().split(',');
+            var final_price = '';
+            $.each( result, function( key, value ) {
+                final_price += value;
+            });
+            final_price = parseFloat(final_price);
+            $("#change").text(($('#receive').val()-final_price).toFixed(2));
+            $("#change").digits();
+        }, 500);
+    });
+    //Receive Money
+    $("input[name='option']").change(function () {
+        if($(this).val() === 'CH'){
+            $("#receive-money").removeClass('hide');
+        }else{
+            $("#receive-money").addClass('hide');
+        }
     });
 
     $("#discount-pre").focus(function () {
@@ -262,9 +285,9 @@ $(document).ready(function () {
                 bills_bay:0
             };
             $.each(pay,function (index,value) {
-                sum_pay+=parseInt(value);
+                sum_pay+=parseFloat(value);
             });
-            if(final_money === sum_pay){
+            if(final_money.toFixed(2) === sum_pay.toFixed(2)){
                 stu_mo = "pass";
             }else{
                 stu_mo = "false";
@@ -281,9 +304,9 @@ $(document).ready(function () {
                 bills_bay:$("#select2").find("#bank-BAY").val()|| 0
             };
             $.each(pay,function (index,value) {
-                sum_pay+=parseInt(value);
+                sum_pay+=parseFloat(value);
             });
-            if(final_money === sum_pay){
+            if(final_money.toFixed(2) === sum_pay.toFixed(2)){
                 stu_mo = "pass";
             }else{
                 stu_mo = "false";
@@ -299,9 +322,9 @@ $(document).ready(function () {
                 bills_bay:$("#select3").find("#bank-BAY").val() || 0
             };
             $.each(pay,function (index,value) {
-                sum_pay+=parseInt(value);
+                sum_pay+=parseFloat(value);
             });
-            if(final_money === sum_pay){
+            if(final_money.toFixed(2) === sum_pay.toFixed(2)){
                 stu_mo = "pass";
             }else{
                 stu_mo = "false";
@@ -380,16 +403,16 @@ $(document).delegate("input[name='i-amount']", 'change', function () {
         allprice = (price * amount);
     }
 
-    $(this).parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(allprice);
+    $(this).parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(allprice.toFixed(2));
 
     var sum = 0;
     $('span[name="allprice"]').each(function () {
         sum += +$(this).text() || 0;
     });
     var stale_money = $("#stale-money").val();
-    $("#result-allprice").text(sum);
+    $("#result-allprice").text(sum.toFixed(2));
     $("#result-allprice").digits();
-    $("#final_price").text(sum - stale_money);
+    $("#final_price").text((sum - stale_money).toFixed(2));
     $("#final_price").digits();
 });
 $(document).delegate("input[name='i-discount-pre']", "change", function () {
@@ -406,15 +429,15 @@ $(document).delegate("input[name='i-discount-pre']", "change", function () {
     }
     var price = $(this).parent().parent().children("td[name='td-price']").children().children("input[name='price']").val();
     var amount = $(this).parent().parent().children("td[name='td-amount']").children("input[name='i-amount']").val();
-    $(this).parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text((amount * price) - ((amount * price) * (discount / 100)));
+    $(this).parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(((amount * price) - ((amount * price) * (discount / 100))).toFixed(2));
     var sum = 0;
     $('span[name="allprice"]').each(function () {
         sum += +$(this).text() || 0;
     });
     var stale_money = $("#stale-money").val();
-    $("#result-allprice").text(sum);
+    $("#result-allprice").text(sum.toFixed(2));
     $("#result-allprice").digits();
-    $("#final_price").text(sum - stale_money);
+    $("#final_price").text((sum - stale_money).toFixed(2));
     $("#final_price").digits();
 });
 $(document).delegate("input[name='i-discount']", "change", function () {
@@ -429,15 +452,15 @@ $(document).delegate("input[name='i-discount']", "change", function () {
     }
     var price = $(this).parent().parent().children("td[name='td-price']").children().children("input[name='price']").val();
     var amount = $(this).parent().parent().children("td[name='td-amount']").children("input[name='i-amount']").val();
-    $(this).parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text((amount * price) - discount);
+    $(this).parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(((amount * price) - discount).toFixed(2));
     var sum = 0;
     $('span[name="allprice"]').each(function () {
         sum += +$(this).text() || 0;
     });
     var stale_money = $("#stale-money").val();
-    $("#result-allprice").text(sum);
+    $("#result-allprice").text(sum.toFixed(2));
     $("#result-allprice").digits();
-    $("#final_price").text(sum - stale_money);
+    $("#final_price").text((sum - stale_money).toFixed(2));
     $("#final_price").digits();
 });
 $(document).delegate("input[name='price']", "change", function () {
@@ -453,15 +476,15 @@ $(document).delegate("input[name='price']", "change", function () {
     } else {
         allprice = (price * amount);
     }
-    $(this).parent().parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(allprice);
+    $(this).parent().parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(allprice.toFixed(2));
     var sum = 0;
     $('span[name="allprice"]').each(function () {
         sum += +$(this).text() || 0;
     });
     var stale_money = $("#stale-money").val();
-    $("#result-allprice").text(sum);
+    $("#result-allprice").text(sum.toFixed(2));
     $("#result-allprice").digits();
-    $("#final_price").text(sum - stale_money);
+    $("#final_price").text((sum - stale_money).toFixed(2));
     $("#final_price").digits();
 });
 
@@ -496,9 +519,9 @@ $(document).delegate("#confirm_delete", "click", function () {
                     sum += +$(this).text() || 0;
                 });
                 var stale_money = $("#stale-money").val();
-                $("#result-allprice").text(sum);
+                $("#result-allprice").text(sum.toFixed(2));
                 $("#result-allprice").digits();
-                $("#final_price").text(sum - stale_money);
+                $("#final_price").text((sum - stale_money).toFixed(2));
                 $("#final_price").digits();
                 //Set NO.
                 var no_id = $("#tbody").children();
