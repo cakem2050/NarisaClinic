@@ -81,7 +81,7 @@ if (!isset($_GET['opd'])) {
                                         <div class="col-md-4 pull-right amount-result">
                                             <span class="pull-right"><b>ยอดชำระ : </b><span
                                                         class="pull-right margin-left-20"><span
-                                                            id="result-allprice">0</span> บาท</span></span>
+                                                            id="result-allprice">0.00</span> บาท</span></span>
                                         </div>
                                     </div>
                                     <!-- Page 1 -->
@@ -281,7 +281,17 @@ if (!isset($_GET['opd'])) {
                                                            placeholder="จำนวน"></span>
                                             </div>
                                             <div>
-                                                <b>ราคาสุทธิ : </b><span class="pull-right"><span id="final_price">0</span> บาท</span>
+                                                <b>ราคาสุทธิ : </b><span class="pull-right"><span id="final_price">0.00</span> บาท</span>
+                                            </div>
+                                            <div id="receive-money" class="hide">
+                                                <div>
+                                                    <b>รับเงิน : </b><span class="pull-right"><span class="pull-right">
+                                                    <input type="number" id="receive" class="form-control"
+                                                           placeholder="จำนวน"></span></span>
+                                                </div>
+                                                <div>
+                                                    <b>เงินทอน : </b><span style="color: #1ABC9C;font-size: 30px" class="pull-right"><span id="change">0.00</span> บาท</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
