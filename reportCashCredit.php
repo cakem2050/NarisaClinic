@@ -164,7 +164,7 @@
                                                         $cash = $conn->prepare($sql_cash);
                                                         $cash->execute(array(':datecheck' => $date));
                                                         while ($result_cash = $cash->fetch(PDO::FETCH_ASSOC)) {
-                                                            echo $result_cash['SUM(bills_cash)'];
+                                                            echo number_format($result_cash['SUM(bills_cash)'],2);
                                                         }
                                                         ?>
                                                     </p>
@@ -181,7 +181,7 @@
                                                             $stmt_sbk = $conn->prepare($sql_sbk);
                                                             $stmt_sbk->execute(array(':datecheck' => $date));
                                                             while ($result_sbk = $stmt_sbk->fetch(PDO::FETCH_ASSOC)) {
-                                                                echo $result_sbk['SUM(' . $st . ')'] . "</p>";
+                                                                echo number_format($result_sbk['SUM(' . $st . ')'],2) . "</p>";
                                                             }
                                                         }
                                                         ?>

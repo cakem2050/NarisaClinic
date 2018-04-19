@@ -77,7 +77,7 @@ $content = $content."
 $result_tc_cop = "";
 while($result_tc = $pay_tc->fetch( PDO::FETCH_ASSOC )) {
     $result_tc_cop = $result_tc['SUM(bills_net)'];
-    $content = $content.$result_tc['SUM(bills_net)'];
+    $content = $content.number_format($result_tc['SUM(bills_net)'],2);
 }
 $content = $content."
         </span>
@@ -88,7 +88,7 @@ $content = $content."
 $result_ch_cop = "";
 while($result_ch = $pay_ch->fetch( PDO::FETCH_ASSOC )) {
     $result_ch_cop = $result_ch['SUM(bills_cash)'];
-    $content = $content.$result_ch['SUM(bills_cash)'];
+    $content = $content.number_format($result_ch['SUM(bills_cash)'],2);
 }
 $content = $content."
         </span></td>
@@ -104,7 +104,7 @@ $content = $content."
 $result_to_cop = "";
 while($result_to = $pay_to->fetch( PDO::FETCH_ASSOC )) {
     $result_to_cop = $result_to['SUM(bills_net)'];
-    $content = $content . $result_to['SUM(bills_net)'];
+    $content = $content . number_format($result_to['SUM(bills_net)'],2);
 }
     $content = $content."
         </span></td>
@@ -122,7 +122,7 @@ while($result_bk = $stmt_bk->fetch( PDO::FETCH_ASSOC )){
     $stmt_sbk->execute(array(':datecheck'=>$date));
     while($result_sbk = $stmt_sbk->fetch( PDO::FETCH_ASSOC )){
         $sum_credit = $sum_credit + $result_sbk['SUM('.$st.')'];
-        $content = $content. "<span> ".$result_sbk['SUM('.$st.')']."</span><br>";
+        $content = $content. "<span> ".number_format($result_sbk['SUM('.$st.')'],2)."</span><br>";
     }
 }
 $content = $content."     
@@ -137,7 +137,7 @@ $content = $content."
 $result_tl_cop = "";
 while($result_tl = $pay_tl->fetch( PDO::FETCH_ASSOC )) {
     $result_tl_cop = $result_tl['SUM(bills_net)'];
-    $content = $content.$result_tl['SUM(bills_net)'];
+    $content = $content.number_format($result_tl['SUM(bills_net)'],2);
 }
 $content = $content."     
         </span></td>
@@ -150,17 +150,17 @@ $content = $content."
             <td>รวม <span>
 ";
 $sum = $result_tc_cop + $result_to_cop + $result_tl_cop;
-$content = $content.$sum;
+$content = $content.number_format($sum,2);
 $content = $content."     
        </span></td>
        <td><span>
 ";
-$content = $content.$result_ch_cop;
+$content = $content.number_format($result_ch_cop,2);
 $content = $content."     
        </span></td>
         <td><span>
 ";
-$content = $content.$sum_credit;
+$content = $content.number_format($sum_credit,2);
 $content = $content."
                 </span></td>
             </tr>
@@ -168,7 +168,7 @@ $content = $content."
     </table>
 </div>";
 $result_all = $sum + $result_ch_cop + $sum_credit;
-$content = $content."<span>รวมรายได้วันที่ ".$report_date." ทั้งสิน ".$result_all." บาท</span>";
+$content = $content."<span>รวมรายได้วันที่ ".$report_date." ทั้งสิน ".number_format($result_all,2)." บาท</span>";
 $mpdf->WriteHTML($content);
 $mpdf->Output();
 ?>

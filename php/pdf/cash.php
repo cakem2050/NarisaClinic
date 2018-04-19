@@ -94,7 +94,7 @@ $sql_pay = "SELECT SUM(bills_pay),SUM(bills_discount),SUM(bills_ost),SUM(bills_n
 $pay = $conn->prepare($sql_pay);
 $pay->execute(array(':datecheck'=>$date));
 while($result = $pay->fetch( PDO::FETCH_ASSOC )) {
-    $content = $content."<td>" . $result['SUM(bills_pay)'] . "</td><td>" . $result['SUM(bills_discount)'] . "</td><td>" . $result['SUM(bills_net)'] . "</td><td>" . $result['SUM(bills_ost)'] . "</td>";
+    $content = $content."<td>" . number_format($result['SUM(bills_pay)'],2) . "</td><td>" . number_format($result['SUM(bills_discount)'],2) . "</td><td>" . number_format($result['SUM(bills_net)'],2) . "</td><td>" . number_format($result['SUM(bills_ost)'],2) . "</td>";
 }
 
 $content = $content."

@@ -168,7 +168,7 @@
                                             $stmt_sbk = $conn->prepare($sql_sbk);
                                             $stmt_sbk->execute(array(':datecheck' => $date));
                                             while ($result_sbk = $stmt_sbk->fetch(PDO::FETCH_ASSOC)) {
-                                                echo $result_sbk['SUM(' . $st . ')'] . "</p>";
+                                                echo number_format($result_sbk['SUM(' . $st . ')'],2) . "</p>";
                                             }
                                         }
                                         ?>

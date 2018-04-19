@@ -121,7 +121,7 @@ $sql_cash = "SELECT SUM(bills_cash) FROM bills WHERE bills_datetime LIKE :datech
 $cash = $conn->prepare($sql_cash);
 $cash->execute(array(':datecheck'=>$date));
 while($result_cash = $cash->fetch( PDO::FETCH_ASSOC )){
-    $content = $content.$result_cash['SUM(bills_cash)'];
+    $content = $content.number_format($result_cash['SUM(bills_cash)'],2);
 }
 $content = $content."</p>";
 $sql_bk = "SELECT * FROM bank WHERE bak_status = :status ORDER BY bak_no ASC";
@@ -134,7 +134,7 @@ while($result_bk = $stmt_bk->fetch( PDO::FETCH_ASSOC )){
     $stmt_sbk = $conn->prepare($sql_sbk);
     $stmt_sbk->execute(array(':datecheck'=>$date));
     while($result_sbk = $stmt_sbk->fetch( PDO::FETCH_ASSOC )){
-        $content = $content.$result_sbk['SUM('.$st.')']."</p>";
+        $content = $content.number_format($result_sbk['SUM('.$st.')'],2)."</p>";
     }
 }
 $content = $content."

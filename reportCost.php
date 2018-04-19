@@ -155,12 +155,12 @@
                                                 <td width="33%">เงินโอนที่ clinic<span
                                                             class="pull-right margin-right-20">
                                             <?php
-                                                echo $result_tc_cop;
+                                                echo number_format($result_tc_cop,2);
                                             ?>
                                             </span></td>
                                                 <td width="33%">เงินสด <span class="pull-right margin-right-20">
                                             <?php
-                                                echo $result_ch_cop;
+                                                echo number_format($result_ch_cop,2);
                                             ?>
                                             </span></td>
                                                 <td>credit</td>
@@ -168,14 +168,14 @@
                                             <tr>
                                                 <td>เงินโอนที่นอก clinic <span class="pull-right margin-right-20">
                                             <?php
-                                                echo $result_to_cop;
+                                                echo number_format($result_to_cop,2);
                                             ?>
                                             </span></td>
                                                 <td></td>
                                                 <td rowspan="2">
                                                     <?php
                                                     foreach ($test as $key => $item){
-                                                        echo "<span class=\"margin-left-10\">+ " . $item . "</span><span class=\"pull-right margin-right-20\">" . $test2[$key] . "</span><br>";
+                                                        echo "<span class=\"margin-left-10\">+ " . $item . "</span><span class=\"pull-right margin-right-20\">" . number_format($test2[$key],2) . "</span><br>";
                                                     }
                                                     ?>
 
@@ -184,7 +184,7 @@
                                             <tr>
                                                 <td>เงินโอน Line@ <span class="pull-right margin-right-20">
                                             <?php
-                                                echo $result_to_cop;
+                                                echo number_format($result_to_cop,2);
                                             ?>
                                             </span></td>
                                                 <td></td>
@@ -192,18 +192,18 @@
                                             <tr>
                                                 <td>รวม <span class="pull-right margin-right-20">
                                                 <?php
-                                                $sum = $result_tc_cop + $result_to_cop + $result_tl_cop;
-                                                echo $sum;
+                                                $sum = number_format($result_tc_cop,2) + number_format($result_to_cop,2) + number_format($result_tl_cop,2);
+                                                echo number_format($sum,2);
                                                 ?>
                                             </span></td>
                                                 <td><span class="pull-right margin-right-20">
                                                 <?php
-                                                echo $result_ch_cop;
+                                                echo number_format($result_ch_cop,2);
                                                 ?>
                                             </span></td>
                                                 <td><span class="pull-right margin-right-20">
                                                 <?php
-                                                echo $sum_credit;
+                                                echo number_format($sum_credit,2);
                                                 ?>
                                             </span></td>
                                             </tr>
@@ -215,8 +215,8 @@
                                         <div class="col-md-3 col-sm-3 pull-left margin-top-20">
                                             <?php
 
-                                            $result_all = $sum + $result_ch_cop + $sum_credit;
-                                            echo "<span>รวมรายได้วันที่ " . $_GET['date'] . " ทั้งสิน " . $result_all . " บาท</span>"
+                                            $result_all = number_format($sum,2) + number_format($result_ch_cop,2) + number_format($sum_credit,2);
+                                            echo "<span>รวมรายได้วันที่ " . $_GET['date'] . " ทั้งสิน " . number_format($result_all,2) . " บาท</span>"
                                             ?>
                                         </div>
                                         <div class="col-md-2 col-sm-2 pull-right margin-top-20">

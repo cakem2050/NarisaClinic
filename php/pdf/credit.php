@@ -126,7 +126,7 @@ $content = $content."
                     $stmt_sbk = $conn->prepare($sql_sbk);
                     $stmt_sbk->execute(array(':datecheck'=>$date));
                     while($result_sbk = $stmt_sbk->fetch( PDO::FETCH_ASSOC )){
-                        $content = $content.$result_sbk['SUM('.$st.')']."</p>";
+                        $content = $content.number_format($result_sbk['SUM('.$st.')'],2)."</p>";
                     }
                 }
 $content = $content."
