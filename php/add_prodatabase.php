@@ -67,9 +67,9 @@ foreach ($items as $key => $value) {
             $discount = $value2;
         }
     }
-    if ($discount_pre != '') {
+    if ($discount_pre != '' && $discount_pre != '0') {
         $final_dicount = ($pro_price * $pro_amount) * ($discount_pre / 100);
-    } elseif ($discount != '') {
+    } elseif ($discount != '' && $discount != '0') {
         $final_dicount = $discount;
     }
     $sum_money += ($pro_price * $pro_amount) - ($final_dicount);
