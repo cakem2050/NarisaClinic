@@ -102,9 +102,9 @@ function date_bu($para) {
                                     <td><?= $count ?></td>
                                     <td><?= $row_cus['cus_name'] ?> <?= $row_cus['cus_sname'] ?></td>
                                     <td><?= date_bu($row['bills_datetime']) ?></td>
-                                    <td><?= $row['bills_pay'] ?></td>
-                                    <td><?= $row['bills_discount'] ?></td>
-                                    <td><?= $row['bills_net'] ?></td>
+                                    <td><?= number_format($row['bills_pay'],2) ?></td>
+                                    <td><?= number_format($row['bills_discount'],2) ?></td>
+                                    <td><?= number_format($row['bills_net'],2) ?></td>
                                     <td>
                                         <?php
                                         if ($row['bills_ptype'] == 'TC') {
@@ -122,7 +122,7 @@ function date_bu($para) {
                                         }
                                         ?>
                                     </td>
-                                    <td><?= $row['bills_ost'] ?></td>
+                                    <td><?= number_format($row['bills_ost'],2) ?></td>
                                 </tr>
                                 <?php
                                 $count++;

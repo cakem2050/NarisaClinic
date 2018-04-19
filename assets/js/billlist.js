@@ -19,7 +19,12 @@ $(document).ready(function () {
         var price_stale = $(this).val();
         var sum = 0;
         $('span[name="allprice"]').each(function () {
-            sum += +$(this).text() || 0;
+            var res = $(this).text().split(",");
+            var res_price = '';
+            $.each( res, function( key, value ) {
+                res_price += value;
+            });
+            sum += parseFloat(res_price) || 0;
         });
         var final_price = sum - price_stale;
         $("#final_price").text(final_price.toFixed(2));
@@ -59,7 +64,12 @@ $(document).ready(function () {
                     $("#tbody").append(data);
                     var sum = 0;
                     $('span[name="allprice"]').each(function () {
-                        sum += +$(this).text() || 0;
+                        var res = $(this).text().split(",");
+                        var res_price = '';
+                        $.each( res, function( key, value ) {
+                            res_price += value;
+                        });
+                        sum += parseFloat(res_price) || 0;
                     });
                     $("#result-allprice").text(sum.toFixed(2));
                     $("#content-pay #section1 input").val(sum);
@@ -104,7 +114,12 @@ $(document).ready(function () {
                     $("#tbody").append(data);
                     var sum = 0;
                     $('span[name="allprice"]').each(function () {
-                        sum += +$(this).text() || 0;
+                        var res = $(this).text().split(",");
+                        var res_price = '';
+                        $.each( res, function( key, value ) {
+                            res_price += value;
+                        });
+                        sum += parseFloat(res_price) || 0;
                     });
                     var stale_money = $("#stale-money").val();
                     $("#result-allprice").text(sum.toFixed(2)).digits();
@@ -268,7 +283,12 @@ $(document).ready(function () {
         var type_pay = $("input[name='option']:checked").val();
         var sum = 0;
         $('span[name="allprice"]').each(function () {
-            sum += +$(this).text() || 0;
+            var res = $(this).text().split(",");
+            var res_price = '';
+            $.each( res, function( key, value ) {
+                res_price += value;
+            });
+            sum += parseFloat(res_price) || 0;
         });
         var stale_money = $("#stale-money").val();
         var final_money = sum-stale_money;
@@ -403,11 +423,16 @@ $(document).delegate("input[name='i-amount']", 'change', function () {
         allprice = (price * amount);
     }
 
-    $(this).parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(allprice.toFixed(2));
+    $(this).parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(allprice.toFixed(2)).digits();
 
     var sum = 0;
     $('span[name="allprice"]').each(function () {
-        sum += +$(this).text() || 0;
+        var res = $(this).text().split(",");
+        var res_price = '';
+        $.each( res, function( key, value ) {
+            res_price += value;
+        });
+        sum += parseFloat(res_price) || 0;
     });
     var stale_money = $("#stale-money").val();
     $("#result-allprice").text(sum.toFixed(2));
@@ -429,10 +454,15 @@ $(document).delegate("input[name='i-discount-pre']", "change", function () {
     }
     var price = $(this).parent().parent().children("td[name='td-price']").children().children("input[name='price']").val();
     var amount = $(this).parent().parent().children("td[name='td-amount']").children("input[name='i-amount']").val();
-    $(this).parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(((amount * price) - ((amount * price) * (discount / 100))).toFixed(2));
+    $(this).parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(((amount * price) - ((amount * price) * (discount / 100))).toFixed(2)).digits();
     var sum = 0;
     $('span[name="allprice"]').each(function () {
-        sum += +$(this).text() || 0;
+        var res = $(this).text().split(",");
+        var res_price = '';
+        $.each( res, function( key, value ) {
+            res_price += value;
+        });
+        sum += parseFloat(res_price) || 0;
     });
     var stale_money = $("#stale-money").val();
     $("#result-allprice").text(sum.toFixed(2));
@@ -452,10 +482,15 @@ $(document).delegate("input[name='i-discount']", "change", function () {
     }
     var price = $(this).parent().parent().children("td[name='td-price']").children().children("input[name='price']").val();
     var amount = $(this).parent().parent().children("td[name='td-amount']").children("input[name='i-amount']").val();
-    $(this).parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(((amount * price) - discount).toFixed(2));
+    $(this).parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(((amount * price) - discount).toFixed(2)).digits();
     var sum = 0;
     $('span[name="allprice"]').each(function () {
-        sum += +$(this).text() || 0;
+        var res = $(this).text().split(",");
+        var res_price = '';
+        $.each( res, function( key, value ) {
+            res_price += value;
+        });
+        sum += parseFloat(res_price) || 0;
     });
     var stale_money = $("#stale-money").val();
     $("#result-allprice").text(sum.toFixed(2));
@@ -476,10 +511,15 @@ $(document).delegate("input[name='price']", "change", function () {
     } else {
         allprice = (price * amount);
     }
-    $(this).parent().parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(allprice.toFixed(2));
+    $(this).parent().parent().parent().children("td[name='td-allprice']").children("span[name='allprice']").text(allprice.toFixed(2)).digits();
     var sum = 0;
     $('span[name="allprice"]').each(function () {
-        sum += +$(this).text() || 0;
+        var res = $(this).text().split(",");
+        var res_price = '';
+        $.each( res, function( key, value ) {
+            res_price += value;
+        });
+        sum += parseFloat(res_price) || 0;
     });
     var stale_money = $("#stale-money").val();
     $("#result-allprice").text(sum.toFixed(2));
@@ -516,7 +556,12 @@ $(document).delegate("#confirm_delete", "click", function () {
                 $(tr).remove();
                 var sum = 0;
                 $('span[name="allprice"]').each(function () {
-                    sum += +$(this).text() || 0;
+                    var res = $(this).text().split(",");
+                    var res_price = '';
+                    $.each( res, function( key, value ) {
+                        res_price += value;
+                    });
+                    sum += parseFloat(res_price) || 0;
                 });
                 var stale_money = $("#stale-money").val();
                 $("#result-allprice").text(sum.toFixed(2));

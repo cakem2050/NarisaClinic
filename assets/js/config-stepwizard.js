@@ -51,7 +51,12 @@ $(document).ready(function () {
         var sum = 0;
         var price_stale = $("#stale-money").val();
         $('span[name="allprice"]').each(function () {
-            sum += +$(this).text() || 0;
+            var res = $(this).text().split(",");
+            var res_price = '';
+            $.each( res, function( key, value ) {
+                res_price += value;
+            });
+            sum += parseFloat(res_price) || 0;
         });
         var final_price = sum - price_stale;
         var body = $("#tbody").children().prop("tagName");
