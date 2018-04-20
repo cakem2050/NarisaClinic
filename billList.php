@@ -310,16 +310,10 @@ if (!isset($_GET['opd'])) {
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="myModalLabel">กรุณาใส่ PassCode</h4>
+                                    <h4 class="modal-title" id="myModalLabel">ยืนยันการลบวัสดุ</h4>
                                 </div>
-                                <div class="modal-body">
-                                    <input type="text" name="passcode" class="form-control" placeholder="รหัส PassCode">
-                                    <div id="passcode-text" style="color: red" class="hide">
-                                        รหัส Passcode ไม่ถูกต้อง
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" id="confirm_delete" data-delete="">ยืนยันการลบ</button>
+                                <div class="modal-body" style="text-align: center">
+                                    <button type="button" class="btn btn-danger" id="confirm_delete" data-dismiss="modal" data-delete="">ยืนยัน</button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
                                 </div>
                             </div>

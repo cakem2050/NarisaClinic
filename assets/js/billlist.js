@@ -1,4 +1,3 @@
-
 var barcode = "";
 
 $(document).ready(function () {
@@ -8,7 +7,7 @@ $(document).ready(function () {
             $(this).text($(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
         })
     }
-    $('#bill-detail').on('keyup keypress', function(e) {
+    $('#bill-detail').on('keyup keypress', function (e) {
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) {
             $("#submit").click();
@@ -21,7 +20,7 @@ $(document).ready(function () {
         $('span[name="allprice"]').each(function () {
             var res = $(this).text().split(",");
             var res_price = '';
-            $.each( res, function( key, value ) {
+            $.each(res, function (key, value) {
                 res_price += value;
             });
             sum += parseFloat(res_price) || 0;
@@ -66,7 +65,7 @@ $(document).ready(function () {
                     $('span[name="allprice"]').each(function () {
                         var res = $(this).text().split(",");
                         var res_price = '';
-                        $.each( res, function( key, value ) {
+                        $.each(res, function (key, value) {
                             res_price += value;
                         });
                         sum += parseFloat(res_price) || 0;
@@ -79,16 +78,16 @@ $(document).ready(function () {
                     $("#final_price").digits();
                     //Set NO.
                     var no_id = $("#tbody").children();
-                    var count=1;
-                    $.each(no_id,function (key,value) {
+                    var count = 1;
+                    $.each(no_id, function (key, value) {
                         $(this).children().first().text(count);
                         count++;
                     });
                 }
             });
             var barcode_input = barcode;
-            setTimeout(function() {
-                var el = $("#tbody").find("input[value='"+barcode_input+"']").parent().parent().find("input[name='i-amount']");
+            setTimeout(function () {
+                var el = $("#tbody").find("input[value='" + barcode_input + "']").parent().parent().find("input[name='i-amount']");
                 el.focus();
             }, 100);
             barcode = "";
@@ -116,7 +115,7 @@ $(document).ready(function () {
                     $('span[name="allprice"]').each(function () {
                         var res = $(this).text().split(",");
                         var res_price = '';
-                        $.each( res, function( key, value ) {
+                        $.each(res, function (key, value) {
                             res_price += value;
                         });
                         sum += parseFloat(res_price) || 0;
@@ -134,8 +133,8 @@ $(document).ready(function () {
                     $("#final_price").digits();
                     //Set NO.
                     var no_id = $("#tbody").children();
-                    var count=1;
-                    $.each(no_id,function (key,value) {
+                    var count = 1;
+                    $.each(no_id, function (key, value) {
                         $(this).children().first().text(count);
                         count++;
                     })
@@ -149,22 +148,22 @@ $(document).ready(function () {
 
     //Receive
     $('#receive').keyup(function () {
-        setTimeout(function(){
+        setTimeout(function () {
             var result = $("#final_price").text().split(',');
             var final_price = '';
-            $.each( result, function( key, value ) {
+            $.each(result, function (key, value) {
                 final_price += value;
             });
             final_price = parseFloat(final_price);
-            $("#change").text(($('#receive').val()-final_price).toFixed(2));
+            $("#change").text(($('#receive').val() - final_price).toFixed(2));
             $("#change").digits();
         }, 500);
     });
     //Receive Money
     $("input[name='option']").change(function () {
-        if($(this).val() === 'CH'){
+        if ($(this).val() === 'CH') {
             $("#receive-money").removeClass('hide');
-        }else{
+        } else {
             $("#receive-money").addClass('hide');
         }
     });
@@ -205,7 +204,9 @@ $(document).ready(function () {
                 $("#pro-id").val($("#id-sub").val());
                 $("#pro-price").val($("#pro_price-sub").val());
             });
-        setTimeout(function() { $("#amount").focus() }, 100);
+        setTimeout(function () {
+            $("#amount").focus()
+        }, 100);
 
     });
     $("#search").select2({
@@ -285,83 +286,83 @@ $(document).ready(function () {
         $('span[name="allprice"]').each(function () {
             var res = $(this).text().split(",");
             var res_price = '';
-            $.each( res, function( key, value ) {
+            $.each(res, function (key, value) {
                 res_price += value;
             });
             sum += parseFloat(res_price) || 0;
         });
         var stale_money = $("#stale-money").val();
-        var final_money = sum-stale_money;
-        var stu_mo ;
+        var final_money = sum - stale_money;
+        var stu_mo;
         var sum_pay = 0;
-        if(type_pay === 'TC' || type_pay === 'TO' || type_pay === 'TL' || type_pay === 'CH'){
+        if (type_pay === 'TC' || type_pay === 'TO' || type_pay === 'TL' || type_pay === 'CH') {
             pay = {
-                bills_cash:$("#select1").find("input[name='money-pay']").val()|| 0,
-                bills_scb:0,
-                bills_ktc:0,
-                bills_kbank:0,
-                bills_bbl:0,
-                bills_tmb:0,
-                bills_bay:0
+                bills_cash: $("#select1").find("input[name='money-pay']").val() || 0,
+                bills_scb: 0,
+                bills_ktc: 0,
+                bills_kbank: 0,
+                bills_bbl: 0,
+                bills_tmb: 0,
+                bills_bay: 0
             };
-            $.each(pay,function (index,value) {
-                sum_pay+=parseFloat(value);
+            $.each(pay, function (index, value) {
+                sum_pay += parseFloat(value);
             });
-            if(final_money.toFixed(2) === sum_pay.toFixed(2)){
+            if (final_money.toFixed(2) === sum_pay.toFixed(2)) {
                 stu_mo = "pass";
-            }else{
+            } else {
                 stu_mo = "false";
             }
             // alert(JSON.stringify(pay));
-        }else if(type_pay === 'CC'){
+        } else if (type_pay === 'CC') {
             pay = {
-                bills_cash:$("#select2").find("#money").val()|| 0,
-                bills_scb:$("#select2").find("#bank-SCB").val()|| 0,
-                bills_ktc:$("#select2").find("#bank-KTC").val()|| 0,
-                bills_kbank:$("#select2").find("#bank-Kbank").val()|| 0,
-                bills_bbl:$("#select2").find("#bank-BBL").val()|| 0,
-                bills_tmb:$("#select2").find("#bank-TMB").val()|| 0,
-                bills_bay:$("#select2").find("#bank-BAY").val()|| 0
+                bills_cash: $("#select2").find("#money").val() || 0,
+                bills_scb: $("#select2").find("#bank-SCB").val() || 0,
+                bills_ktc: $("#select2").find("#bank-KTC").val() || 0,
+                bills_kbank: $("#select2").find("#bank-Kbank").val() || 0,
+                bills_bbl: $("#select2").find("#bank-BBL").val() || 0,
+                bills_tmb: $("#select2").find("#bank-TMB").val() || 0,
+                bills_bay: $("#select2").find("#bank-BAY").val() || 0
             };
-            $.each(pay,function (index,value) {
-                sum_pay+=parseFloat(value);
+            $.each(pay, function (index, value) {
+                sum_pay += parseFloat(value);
             });
-            if(final_money.toFixed(2) === sum_pay.toFixed(2)){
+            if (final_money.toFixed(2) === sum_pay.toFixed(2)) {
                 stu_mo = "pass";
-            }else{
+            } else {
                 stu_mo = "false";
             }
-        }else if(type_pay==='CD'){
+        } else if (type_pay === 'CD') {
             pay = {
-                bills_cash:0,
-                bills_scb:$("#select3").find("#bank-SCB").val() || 0,
-                bills_ktc:$("#select3").find("#bank-KTC").val() || 0,
-                bills_kbank:$("#select3").find("#bank-Kbank").val() || 0,
-                bills_bbl:$("#select3").find("#bank-BBL").val() || 0,
-                bills_tmb:$("#select3").find("#bank-TMB").val() || 0,
-                bills_bay:$("#select3").find("#bank-BAY").val() || 0
+                bills_cash: 0,
+                bills_scb: $("#select3").find("#bank-SCB").val() || 0,
+                bills_ktc: $("#select3").find("#bank-KTC").val() || 0,
+                bills_kbank: $("#select3").find("#bank-Kbank").val() || 0,
+                bills_bbl: $("#select3").find("#bank-BBL").val() || 0,
+                bills_tmb: $("#select3").find("#bank-TMB").val() || 0,
+                bills_bay: $("#select3").find("#bank-BAY").val() || 0
             };
-            $.each(pay,function (index,value) {
-                sum_pay+=parseFloat(value);
+            $.each(pay, function (index, value) {
+                sum_pay += parseFloat(value);
             });
-            if(final_money.toFixed(2) === sum_pay.toFixed(2)){
+            if (final_money.toFixed(2) === sum_pay.toFixed(2)) {
                 stu_mo = "pass";
-            }else{
+            } else {
                 stu_mo = "false";
             }
         }
         $.each($("#tbody").children(), function (index, value) {
             var item = {
                 pro_id: $(this).find("input[name='pro_id']").val(),
-                pro_name:$(this).find("td[name='pro_name']").text(),
-                pro_price:$(this).find("input[name='price']").val(),
-                pro_amount:$(this).find("input[name='i-amount']").val(),
-                discount_pre:$(this).find("input[name='i-discount-pre']").val(),
-                discount:$(this).find("input[name='i-discount']").val()
+                pro_name: $(this).find("td[name='pro_name']").text(),
+                pro_price: $(this).find("input[name='price']").val(),
+                pro_amount: $(this).find("input[name='i-amount']").val(),
+                discount_pre: $(this).find("input[name='i-discount-pre']").val(),
+                discount: $(this).find("input[name='i-discount']").val()
             };
             items.push(item);
         });
-        if(stu_mo === 'pass') {
+        if (stu_mo === 'pass') {
             $.ajax({
                 type: "POST",
                 url: "php/add_prodatabase.php",
@@ -369,21 +370,21 @@ $(document).ready(function () {
                     cus_opd: $("#cusid").text(),
                     bills_ost: $("#stale-money").val(),
                     items: items,
-                    bills_ptype:$("input[name='option']:checked").val(),
-                    type_pay:pay,
+                    bills_ptype: $("input[name='option']:checked").val(),
+                    type_pay: pay,
                 },
                 success: function (data) {
-                    if(data === 'pass'){
+                    if (data === 'pass') {
                         $("#modelSuccess").modal('show');
-                        setTimeout(function(){
-                                window.location.href='home.php';
-                            }, 1000);
-                    }else{
+                        setTimeout(function () {
+                            window.location.href = 'home.php';
+                        }, 1000);
+                    } else {
                         alert(data);
                     }
                 }
             });
-        }else if(stu_mo === 'false'){
+        } else if (stu_mo === 'false') {
             $("#modelError").modal('show');
         }
     });
@@ -429,7 +430,7 @@ $(document).delegate("input[name='i-amount']", 'change', function () {
     $('span[name="allprice"]').each(function () {
         var res = $(this).text().split(",");
         var res_price = '';
-        $.each( res, function( key, value ) {
+        $.each(res, function (key, value) {
             res_price += value;
         });
         sum += parseFloat(res_price) || 0;
@@ -459,7 +460,7 @@ $(document).delegate("input[name='i-discount-pre']", "change", function () {
     $('span[name="allprice"]').each(function () {
         var res = $(this).text().split(",");
         var res_price = '';
-        $.each( res, function( key, value ) {
+        $.each(res, function (key, value) {
             res_price += value;
         });
         sum += parseFloat(res_price) || 0;
@@ -487,7 +488,7 @@ $(document).delegate("input[name='i-discount']", "change", function () {
     $('span[name="allprice"]').each(function () {
         var res = $(this).text().split(",");
         var res_price = '';
-        $.each( res, function( key, value ) {
+        $.each(res, function (key, value) {
             res_price += value;
         });
         sum += parseFloat(res_price) || 0;
@@ -516,7 +517,7 @@ $(document).delegate("input[name='price']", "change", function () {
     $('span[name="allprice"]').each(function () {
         var res = $(this).text().split(",");
         var res_price = '';
-        $.each( res, function( key, value ) {
+        $.each(res, function (key, value) {
             res_price += value;
         });
         sum += parseFloat(res_price) || 0;
@@ -541,47 +542,69 @@ $(document).delegate("button[name='btn-delete']", "click", function () {
 $(document).delegate("#confirm_delete", "click", function () {
     var id_pro = $(this).attr('data-delete');
     var tr = "tr[name='" + id_pro + "']";
-    $.ajax({
-        url:"php/checkPasscode.php",
-        type:"POST",
-        data:{
-            passcode:$("input[name='passcode']").val(),
-        },
-        success:function (data) {
-            if(data==='false'){
-                $("#passcode-text").removeClass('hide');
-            }else{
-                $('#modelDelete').modal('toggle');
-                $("#passcode-text").addClass('hide');
-                $(tr).remove();
-                var sum = 0;
-                $('span[name="allprice"]').each(function () {
-                    var res = $(this).text().split(",");
-                    var res_price = '';
-                    $.each( res, function( key, value ) {
-                        res_price += value;
-                    });
-                    sum += parseFloat(res_price) || 0;
-                });
-                var stale_money = $("#stale-money").val();
-                $("#result-allprice").text(sum.toFixed(2));
-                $("#result-allprice").digits();
-                $("#final_price").text((sum - stale_money).toFixed(2));
-                $("#final_price").digits();
-                //Set NO.
-                var no_id = $("#tbody").children();
-                var count=1;
-                $.each(no_id,function (key,value) {
-                    $(this).children().first().text(count);
-                    count++;
-                });
-            }
-        }
+    $(tr).remove();
+    var sum = 0;
+    $('span[name="allprice"]').each(function () {
+        var res = $(this).text().split(",");
+        var res_price = '';
+        $.each(res, function (key, value) {
+            res_price += value;
+        });
+        sum += parseFloat(res_price) || 0;
     });
+    var stale_money = $("#stale-money").val();
+    $("#result-allprice").text(sum.toFixed(2));
+    $("#result-allprice").digits();
+    $("#final_price").text((sum - stale_money).toFixed(2));
+    $("#final_price").digits();
+    //Set NO.
+    var no_id = $("#tbody").children();
+    var count = 1;
+    $.each(no_id, function (key, value) {
+        $(this).children().first().text(count);
+        count++;
+    });
+    // $.ajax({
+    //     url:"php/checkPasscode.php",
+    //     type:"POST",
+    //     data:{
+    //         passcode:$("input[name='passcode']").val(),
+    //     },
+    //     success:function (data) {
+    //         if(data==='false'){
+    //             $("#passcode-text").removeClass('hide');
+    //         }else{
+    //             $('#modelDelete').modal('toggle');
+    //             $("#passcode-text").addClass('hide');
+    //             $(tr).remove();
+    //             var sum = 0;
+    //             $('span[name="allprice"]').each(function () {
+    //                 var res = $(this).text().split(",");
+    //                 var res_price = '';
+    //                 $.each( res, function( key, value ) {
+    //                     res_price += value;
+    //                 });
+    //                 sum += parseFloat(res_price) || 0;
+    //             });
+    //             var stale_money = $("#stale-money").val();
+    //             $("#result-allprice").text(sum.toFixed(2));
+    //             $("#result-allprice").digits();
+    //             $("#final_price").text((sum - stale_money).toFixed(2));
+    //             $("#final_price").digits();
+    //             //Set NO.
+    //             var no_id = $("#tbody").children();
+    //             var count=1;
+    //             $.each(no_id,function (key,value) {
+    //                 $(this).children().first().text(count);
+    //                 count++;
+    //             });
+    //         }
+    //     }
+    // });
 
 });
 
-$(document).delegate("input[name='i-amount']","keyup keypress",function (e) {
+$(document).delegate("input[name='i-amount']", "keyup keypress", function (e) {
     var keyCode = e.keyCode || e.which;
     if (keyCode === 13) {
         $("input[name='i-amount']").blur();
